@@ -6402,11 +6402,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\temp\\PacBomb\\APIPacBom\\APIPacBom\\APIPacBom.csproj",
-      "projectName": "APIPacBom",
-      "projectPath": "D:\\temp\\PacBomb\\APIPacBom\\APIPacBom\\APIPacBom.csproj",
+      "projectUniqueName": "D:\\temp\\PacBomb\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
+      "projectName": "APIPacBomb",
+      "projectPath": "D:\\temp\\PacBomb\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
       "packagesPath": "C:\\Users\\Manuel\\.nuget\\packages\\",
-      "outputPath": "D:\\temp\\PacBomb\\APIPacBom\\APIPacBom\\obj\\",
+      "outputPath": "D:\\temp\\PacBomb\\APIPacBomb\\APIPacBomb\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Microsoft\\Xamarin\\NuGet\\"

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "R0Fykrb2VUUi0Z4Ecfg75UnSpic9KoviVPbVNRWaX1WDDM1AQTUdj6rnjy6724VYlwD8n57v3puYVxDtRFLgog==",
+  "dgSpecHash": "nBjSXf3+6eHoo+PgsxnRRHLVI/BGZZfJtNdh20oZV/aeoYrgxs5BizNTj0Dv0B4mYZLY6GBQ3kC6CDl2UYlszA==",
   "success": true,
-  "projectFilePath": "D:\\temp\\PacBomb\\APIPacBom\\APIPacBom\\APIPacBom.csproj",
+  "projectFilePath": "D:\\temp\\PacBomb\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Manuel\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.20\\microsoft.aspnetcore.authentication.jwtbearer.3.1.20.nupkg.sha512",
     "C:\\Users\\Manuel\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
