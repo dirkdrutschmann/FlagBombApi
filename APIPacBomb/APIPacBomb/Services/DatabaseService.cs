@@ -23,7 +23,7 @@ namespace APIPacBomb.Services
         public DatabaseService(string user, string pass, string server, string database)
         {
             string connectionString = string.Format(
-                "SERVER={0};DATABASE={1};UID={2};PASSWORD={3}; SSL Mode=None",
+                "SERVER={0};DATABASE={1};UID={2};PASSWORD={3};SSL Mode=None",
                 server,
                 database,
                 user,
@@ -37,7 +37,7 @@ namespace APIPacBomb.Services
         ///   Liefert die geöffnete Datenbankverbindung zurück
         /// </summary>
         /// <returns>Datenbankverbindung</returns>
-        private MySqlConnection _GetCnnection()
+        private MySqlConnection _GetConnection()
         {
             if (_dbConnection.State == System.Data.ConnectionState.Closed || _dbConnection.State == System.Data.ConnectionState.Broken)
             {
