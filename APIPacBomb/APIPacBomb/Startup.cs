@@ -14,7 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace APIPacBom
+namespace APIPacBomb
 {
     public class Startup
     {
@@ -28,6 +28,16 @@ namespace APIPacBom
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var database = new Services.DatabaseService(
+                    Configuration["Db:user"],
+                    Configuration["Db:pass"],
+                    Configuration["Db:server"],
+                    Configuration["Db:database"]
+                );
+
+            services.AddSingleton<Interfaces.IDatabaseService>(database);
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option => {
                     option.TokenValidationParameters = new TokenValidationParameters()

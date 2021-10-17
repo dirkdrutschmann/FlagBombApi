@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace APIPacBom.Controllers
+namespace APIPacBomb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
