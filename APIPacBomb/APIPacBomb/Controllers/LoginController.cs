@@ -67,9 +67,14 @@ namespace APIPacBomb.Controllers
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            List<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>()
+            {
+                new System.Security.Claims.Claim("uname", user.Username)
+            };
+
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
               _config["Jwt:Issuer"],
-              null,
+              claims,
               expires: DateTime.Now.AddMinutes(120),
               signingCredentials: credentials);
 

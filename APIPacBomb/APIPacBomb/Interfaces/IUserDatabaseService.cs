@@ -13,6 +13,8 @@ namespace APIPacBomb.Interfaces
 
         public Model.User RegisterUser(Model.User user);
 
+        public Model.User GetUser(string usernameOrMail);
+
         public void SetUser(Model.User user);
 
         public Model.User Authenticate(Model.User user);
