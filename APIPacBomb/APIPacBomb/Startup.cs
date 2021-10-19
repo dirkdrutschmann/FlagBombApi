@@ -1,17 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace APIPacBomb
@@ -29,14 +22,14 @@ namespace APIPacBomb
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var database = new Services.DatabaseService(
+            var database = new Services.UserDatabaseService(
                     Configuration["Db:user"],
                     Configuration["Db:pass"],
                     Configuration["Db:server"],
                     Configuration["Db:database"]
                 );
 
-            services.AddSingleton<Interfaces.IDatabaseService>(database);
+            services.AddSingleton<Interfaces.IUserDatabaseService>(database);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option => {

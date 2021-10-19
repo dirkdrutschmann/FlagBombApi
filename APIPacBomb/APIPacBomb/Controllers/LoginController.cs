@@ -21,13 +21,16 @@ namespace APIPacBomb.Controllers
         /// </summary>
         private IConfiguration _config;
 
+        private Interfaces.IUserDatabaseService _userDatabaseService;
+
         /// <summary>
         ///   Erstellt eine Instanz des Logincontrollers
         /// </summary>
         /// <param name="config">Dependency Injection für Konfigurationsdaten</param>
-        public LoginController(IConfiguration config)
+        public LoginController(IConfiguration config, Interfaces.IUserDatabaseService userDatabaseService)
         {
             _config = config;
+            _userDatabaseService = userDatabaseService;
         }
 
         /// <summary>
@@ -41,11 +44,13 @@ namespace APIPacBomb.Controllers
         public IActionResult Login([FromBody] Model.User login)
         {
             IActionResult response = Unauthorized();
-            var user = Model.User.Authenticate(login);
+            var user = _userDatabaseService.Authenticate(login);
 
             if (user != null)
             {
                 var tokenString = _GenerateJSONWebToken(user);
+                user.LastLogon = DateTime.Now;
+                _userDatabaseService.SetUser(user);
                 response = Ok(new { token = tokenString });
             }
 
