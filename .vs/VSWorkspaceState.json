@@ -2,7 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\APIPacBomb",
-    "\\APIPacBomb\\APIPacBomb"
+    "\\APIPacBomb\\APIPacBomb",
+    "\\APIPacBomb\\APIPacBomb\\Controllers"
   ],
+  "SelectedNode": "\\APIPacBomb\\APIPacBomb\\Controllers\\RegisterController.cs",
   "PreviewInSolutionExplorer": false
 }
