@@ -1,3 +1,4 @@
+using APIPacBomb.Middleware;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,8 @@ namespace APIPacBomb
                     Configuration["Db:database"]
                 );
 
+
+            services.AddWebSocketManager();
             services.AddSingleton<Interfaces.IUserDatabaseService>(database);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -56,6 +59,9 @@ namespace APIPacBomb
                 app.UseDeveloperExceptionPage();
             }
 
+            var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            var serviceProvider = serviceScopeFactory.CreateScope().ServiceProvider;
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
@@ -65,6 +71,8 @@ namespace APIPacBomb
             app.UseAuthorization();
 
             app.UseWebSockets();
+
+            app.MapWebSocketManger("/api/ws", serviceProvider.GetService<Classes.MessageHandler>());
 
             app.UseEndpoints(endpoints =>
             {
