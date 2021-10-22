@@ -28,8 +28,8 @@ namespace APIPacBomb.Middleware
                 return;
             }
 
-            // Nur gesetzt wenn User eingeloggt ist
-            if (context.User.Claims.First(p => p.Type == "uname") == null)
+            // Nur gesetzt wenn User eingeloggt ist            
+            if (string.IsNullOrEmpty(Classes.Util.GetUsernameFromToken(context)))
             {
                 return;
             }

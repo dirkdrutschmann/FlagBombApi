@@ -25,10 +25,7 @@ namespace APIPacBomb.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
-            Model.User user = _userDatabaseService.GetUser(identity.Claims.Where(x => x.Type == "uname").FirstOrDefault().Value);
-            
-            return Ok(user);
+            return Ok(_userDatabaseService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext)));
         }
     }
 }

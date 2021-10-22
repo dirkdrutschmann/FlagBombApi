@@ -105,6 +105,27 @@ namespace APIPacBomb.Services
             return GetUser(user.Username);
         }
 
+        public User GetUser(int id)
+        {
+            string cmd = "select id, " +
+                         "       username, " +
+                         "       email, " +
+                         "       prename, " +
+                         "       lastname, " +
+                         "       registration_on, " +
+                         "       last_logon, " +
+                         "       is_admin " +
+                         "from  pb_users " +
+                         "where id = @id";
+
+            List<KeyValuePair<string, string>> paras = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("@id", id.ToString())
+            };
+
+            return _GenerateUserObject(_ExecuteQuery(cmd, paras));            
+        }
+
         /// <summary>
         ///   Liefert den Nutzer mit entsprechenden Nutzernamen oder E-Mailadresse zurück
         /// </summary>
@@ -112,37 +133,60 @@ namespace APIPacBomb.Services
         /// <returns>Ermittelter Nutzer oder null, wenn kein Nutzer gefunden wurde</returns>
         public User GetUser(string usernameOrMail)
         {
-            string cmd = "select id, username, email, prename, lastname, registration_on, last_logon from pb_users where username = @username or email = @email";
+            string cmd = "select id, " +
+                         "       username, " +
+                         "       email, " +
+                         "       prename, " +
+                         "       lastname, " +
+                         "       registration_on, " +
+                         "       last_logon, " +
+                         "       is_admin " +
+                         "from  pb_users " +
+                         "where username = @username " +
+                         "or    email = @email";
+
             List<KeyValuePair<string, string>> paras = new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("@username", usernameOrMail),
                 new KeyValuePair<string, string>("@email", usernameOrMail)
             };
 
+            return _GenerateUserObject(_ExecuteQuery(cmd, paras));
+        }
+
+        /// <summary>
+        ///   Liefert das Nutzerbild als Base64-kodierter String
+        /// </summary>
+        /// <param name="id">User-Id</param>
+        /// <returns>Base64-kodierter String</returns>
+        public string GetUserPicture(int id)
+        {
+            string cmd = "select length(picture) as file_size, " +
+                         "       picture " +
+                         "from  pb_users " +
+                         "where id = @id";
+
+            List<KeyValuePair<string, string>> paras = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("@id", id.ToString())
+            };
+
             IEnumerable<IDataRecord> records = _ExecuteQuery(cmd, paras);
 
-            User user = null;
+            string pictureBase64 = string.Empty;
 
-            if (records.Count() > 0)
+            foreach (IDataRecord record in records)
             {
-                user = new User();
+                int fileSize = record.GetInt32(record.GetOrdinal("file_size"));
+                byte[] rawData = new byte[fileSize];
+                record.GetBytes(record.GetOrdinal("picture"), 0, rawData, 0, fileSize);
+                pictureBase64 = Convert.ToBase64String(rawData);
 
-                foreach (IDataRecord record in records)
-                {
-                    user.Id = Convert.ToInt32(record.GetValue(0));
-                    user.Username = record.GetString(1);
-                    user.Email = record.GetString(2);
-                    user.Prename = record.GetString(3);
-                    user.Lastname = record.GetString(4);
-                    user.RegistrationOn = record.GetDateTime(5);
-                    user.LastLogon = record.IsDBNull(6) ? DateTime.Now : record.GetDateTime(6);
-
-
-                    break;
-                }
+                break;
             }
 
-            return user;
+            return pictureBase64;
+
         }
 
         /// <summary>
@@ -205,7 +249,7 @@ namespace APIPacBomb.Services
         /// <returns></returns>
         public User Authenticate(User user)
         {
-            string cmd = "select secret, password from pb_users where username = @username or email = @email";
+            string cmd = "select id, secret, password from pb_users where username = @username or email = @email";
             List<KeyValuePair<string, string>> paras = new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("@username", string.IsNullOrEmpty(user.Username) ? "" : user.Username),
@@ -218,24 +262,54 @@ namespace APIPacBomb.Services
 
             if (records.Count() > 0)
             {
-                bool found = false;
+                int id = -1;
 
                 foreach (IDataRecord record in records)
                 {
-                    if (User.GeneratePasswordHash(user.Password, record.GetString(0)) == record.GetString(1))
+                    if (User.GeneratePasswordHash(user.Password, record.GetString(record.GetOrdinal("secret"))) == record.GetString(record.GetOrdinal("password")))
                     {
-                        found = true;                        
+                        id = record.GetInt32(record.GetOrdinal("id"));                        
                     }
                 }
 
-                if (found)
+                if (id >= 0)
                 {
-                    regUser = GetUser(string.IsNullOrEmpty(user.Username) ? user.Email : user.Username);
-                }
-                
+                    regUser = GetUser(id);
+                }                
             }
 
             return regUser;
+        }
+
+        /// <summary>
+        ///   Liefert anhand des übergebene Record ein Nutzerobjekt
+        /// </summary>
+        /// <param name="records">Resultset</param>
+        /// <returns>Instanz eines Nutzers</returns>
+        private User _GenerateUserObject(IEnumerable<IDataRecord> records)
+        {
+            User user = null;
+
+            if (records.Count() > 0)
+            {
+                user = new User();
+
+                foreach (IDataRecord record in records)
+                {
+                    user.Id = Convert.ToInt32(record.GetValue(record.GetOrdinal("id")));
+                    user.Username = record.GetString(record.GetOrdinal("username"));
+                    user.Email = record.GetString(record.GetOrdinal("email"));
+                    user.Prename = record.GetString(record.GetOrdinal("prename"));
+                    user.Lastname = record.GetString(record.GetOrdinal("lastname"));
+                    user.RegistrationOn = record.GetDateTime(record.GetOrdinal("registration_on"));
+                    user.LastLogon = record.IsDBNull(6) ? DateTime.Now : record.GetDateTime(record.GetOrdinal("last_logon"));
+                    user.IsAdmin = record.GetInt16(record.GetOrdinal("is_admin")) == 1 ? true : false;                    
+
+                    break;
+                }
+            }
+
+            return user;
         }
     }
 }

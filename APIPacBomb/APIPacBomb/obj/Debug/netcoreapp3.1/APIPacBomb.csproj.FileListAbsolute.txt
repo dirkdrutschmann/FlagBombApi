@@ -322,7 +322,6 @@ D:\C#\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.dll
 D:\C#\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.pdb
 D:\C#\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.genruntimeconfig.cache
 D:\C#\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.csproj.AssemblyReference.cache
-D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.csprojAssemblyReference.cache
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.csproj.CoreCompileInputs.cache
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.MvcApplicationPartsAssemblyInfo.cache
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.AssemblyInfoInputs.cache

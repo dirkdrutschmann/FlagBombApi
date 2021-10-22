@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -12,6 +13,11 @@ namespace APIPacBomb.Classes
     /// </summary>
     public class Util
     {
+        /// <summary>
+        ///   Bezeichnung des CUSTOM-JWT-Claim
+        /// </summary>
+        public const string CLAIM_TYPE = "uname";
+
         /// <summary>
         ///   Generiert einen SHA256 Hash
         /// </summary>
@@ -31,6 +37,24 @@ namespace APIPacBomb.Classes
 
                 return builder.ToString();
             }
+        }
+
+        /// <summary>
+        ///   Ließt den Nutzernamen aus einen JWT
+        /// </summary>
+        /// <param name="context">HTTP-Kontext</param>
+        /// <returns>Nutzername, wenn Claim im JWT gesetzt, sonst <code>string.Empty</code></returns>
+        public static string GetUsernameFromToken(HttpContext context)
+        {
+            System.Security.Claims.Claim username = context.User.Claims.First(p => p.Type == CLAIM_TYPE);
+
+            // Nur gesetzt wenn User eingeloggt ist
+            if (username == null)
+            {
+                return string.Empty;
+            }
+
+            return username.Value;
         }
     }
 }

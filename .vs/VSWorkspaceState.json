@@ -3,8 +3,8 @@
     "",
     "\\APIPacBomb",
     "\\APIPacBomb\\APIPacBomb",
-    "\\APIPacBomb\\APIPacBomb\\Controllers"
+    "\\APIPacBomb\\APIPacBomb\\Middleware"
   ],
-  "SelectedNode": "\\APIPacBomb\\APIPacBomb\\Controllers\\RegisterController.cs",
+  "SelectedNode": "\\APIPacBomb\\APIPacBomb\\Middleware\\WebSocketManagerMiddleware.cs",
   "PreviewInSolutionExplorer": false
 }

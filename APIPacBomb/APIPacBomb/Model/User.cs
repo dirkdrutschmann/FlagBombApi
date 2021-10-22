@@ -57,6 +57,11 @@ namespace APIPacBomb.Model
         public DateTime RegistrationOn { get; set; }
 
         /// <summary>
+        ///   <code>true</code>, wenn Nutzer Adminstatus hat, sonst <code>false</code>
+        /// </summary>
+        public bool IsAdmin { get; set; }
+
+        /// <summary>
         ///   Erzeugt das Passwort mit Hilfe der Rohdaten und dem zufälligen Secret
         /// </summary>        
         public void GeneratePasswordHash()

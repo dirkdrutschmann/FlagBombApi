@@ -69,7 +69,7 @@ namespace APIPacBomb.Controllers
 
             List<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>()
             {
-                new System.Security.Claims.Claim("uname", user.Username)
+                new System.Security.Claims.Claim(Classes.Util.CLAIM_TYPE, user.Username)
             };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
