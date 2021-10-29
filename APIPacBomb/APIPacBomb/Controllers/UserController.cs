@@ -24,14 +24,7 @@ namespace APIPacBomb.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            Model.User user = _userDatabaseService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext));
-
-            if (!user.IsAdmin)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
+            return Ok(_userDatabaseService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext)));            
         }
 
         // GET: api/User/5
