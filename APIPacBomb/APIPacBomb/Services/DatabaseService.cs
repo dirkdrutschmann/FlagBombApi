@@ -78,12 +78,15 @@ namespace APIPacBomb.Services
 
 
                 if (_CurrentConnectionRetries <= 5)
-                {
-                    return _dbConnection;
+                {                    
+                    return _GetConnection();
                 }
+
+                return null;
 
             }
 
+            _CurrentConnectionRetries = 0;
             return _dbConnection;
         }
 
