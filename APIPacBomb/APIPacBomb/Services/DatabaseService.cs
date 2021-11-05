@@ -15,6 +15,21 @@ namespace APIPacBomb.Services
         private MySqlConnection _dbConnection;
 
         /// <summary>
+        ///   Datenbankcommand
+        /// </summary>
+        private MySqlCommand _dbCommand;
+
+        /// <summary>
+        ///   Verbindungszeichenkette
+        /// </summary>
+        private readonly string _ConnectionString;
+
+        /// <summary>
+        ///   Verbindungsversuche
+        /// </summary>
+        private int _CurrentConnectionRetries { get; set; }        
+
+        /// <summary>
         ///   Erstellt eine Instanz des Datenbankdienstes
         /// </summary>
         /// <param name="user">DB-Nutzername</param>
@@ -23,7 +38,7 @@ namespace APIPacBomb.Services
         /// <param name="database">DB-Name</param>
         public DatabaseService(string user, string pass, string server, string database)
         {
-            string connectionString = string.Format(
+            _ConnectionString = string.Format(
                 "SERVER={0};DATABASE={1};UID={2};PASSWORD={3};SSL Mode=None;convert zero datetime=True",
                 server,
                 database,
@@ -31,25 +46,9 @@ namespace APIPacBomb.Services
                 pass
             );
 
-            _dbConnection = new MySqlConnection(connectionString);
-        }
-
-        /// <summary>
-        ///   Erstellt eine Instanz des Datenbankservices
-        /// </summary>
-        /// <param name="connectionString">Verbindungszeichenkette</param>
-        public DatabaseService(string connectionString)
-        {
-            _dbConnection = new MySqlConnection(connectionString);
-        }
-
-        /// <summary>
-        ///   Erstellt eine Instanz des Datenbankservices
-        /// </summary>
-        /// <param name="connection">Bestehende Verbindung</param>
-        public DatabaseService(MySqlConnection connection)
-        {
-            _dbConnection = connection;
+            _dbConnection = new MySqlConnection(_ConnectionString);
+            _dbCommand = new MySqlCommand();
+            _CurrentConnectionRetries = 0;
         }
 
         /// <summary>
@@ -58,9 +57,31 @@ namespace APIPacBomb.Services
         /// <returns>Datenbankverbindung</returns>
         protected MySqlConnection _GetConnection()
         {
-            if (_dbConnection.State == System.Data.ConnectionState.Closed || _dbConnection.State == System.Data.ConnectionState.Broken)
+            if (_dbConnection.State == ConnectionState.Closed || _dbConnection.State == ConnectionState.Broken)
             {
                 _dbConnection.Open();
+            }
+
+            try
+            {
+                _dbCommand.CommandText = "select 1 from dual";
+                _dbCommand.Connection = _dbConnection;
+                _dbCommand.ExecuteScalar();
+            }
+            catch
+            {
+                _CurrentConnectionRetries++;
+                _dbConnection = new MySqlConnection(_ConnectionString);
+
+                _dbCommand = new MySqlCommand();
+                _dbCommand.Connection = _dbConnection;
+
+
+                if (_CurrentConnectionRetries <= 5)
+                {
+                    return _dbConnection;
+                }
+
             }
 
             return _dbConnection;
@@ -74,28 +95,31 @@ namespace APIPacBomb.Services
         /// <returns>Result-Set</returns>
         protected IEnumerable<IDataRecord> _ExecuteQuery(string query, List<KeyValuePair<string, string>> param)
         {
-
-            using (MySqlCommand cmd = new MySqlCommand(query, _GetConnection()))
+            if (_dbCommand.Connection == null)
             {
-                if (param.Count > 0)
-                {
-                    foreach (KeyValuePair<string, string> pair in param)
-                    {
-                        cmd.Parameters.AddWithValue(pair.Key, pair.Value);
-                    }
+                _GetConnection();
+            }
 
-                    cmd.Prepare();
+            _dbCommand.CommandText = query;
+            _dbCommand.Parameters.Clear();
+
+            if (param.Count > 0)
+            {
+                foreach (KeyValuePair<string, string> pair in param)
+                {
+                    _dbCommand.Parameters.AddWithValue(pair.Key, pair.Value);
                 }
 
+                _dbCommand.Prepare();
+            }
 
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+
+            using (MySqlDataReader reader = _dbCommand.ExecuteReader())
+            {
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                    {
-                        yield return reader;
-                    }
+                    yield return reader;
                 }
-
             }
 
         }
@@ -107,21 +131,25 @@ namespace APIPacBomb.Services
         /// <param name="param">Kommandoparameter</param>
         protected void _ExecuteNonQuery(string cmdText, List<KeyValuePair<string, string>> param)
         {
-            using (MySqlCommand cmd = new MySqlCommand(cmdText, _GetConnection()))
+            if (_dbCommand.Connection == null)
             {
-                if (param.Count > 0)
-                {
-                    foreach (KeyValuePair<string, string> pair in param)
-                    {
-                        cmd.Parameters.AddWithValue(pair.Key, pair.Value);
-                    }
+                _GetConnection();
+            }
 
-                    cmd.Prepare();
+            _dbCommand.CommandText = cmdText;
+            _dbCommand.Parameters.Clear();
+
+            if (param.Count > 0)
+            {
+                foreach (KeyValuePair<string, string> pair in param)
+                {
+                    _dbCommand.Parameters.AddWithValue(pair.Key, pair.Value);
                 }
 
-
-                cmd.ExecuteNonQuery();
+                _dbCommand.Prepare();
             }
+
+            _dbCommand.ExecuteNonQuery();
         }
     }
 }

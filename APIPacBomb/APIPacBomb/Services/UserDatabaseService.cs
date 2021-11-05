@@ -21,20 +21,6 @@ namespace APIPacBomb.Services
         { }
 
         /// <summary>
-        ///   Erstellt eine Instanz des Datenbankservices
-        /// </summary>
-        /// <param name="connectionString">Verbindungszeichenkette</param>
-        public UserDatabaseService(string connectionString) : base(connectionString)
-        { }
-
-        /// <summary>
-        ///   Erstellt eine Instanz des Datenbankservices
-        /// </summary>
-        /// <param name="connection">Bestehende Verbindung</param>
-        public UserDatabaseService(MySqlConnection connection): base(connection)
-        { }
-
-        /// <summary>
         ///   Liefert <code>true</code> zurück, wenn die übergebene Mail bereits in der users-Tabelle existiert,
         ///   sonst <code>false</code>
         /// </summary>

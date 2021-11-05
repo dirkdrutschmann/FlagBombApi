@@ -433,3 +433,4 @@ D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.cspr
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\staticwebassets\APIPacBomb.StaticWebAssets.Manifest.cache
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\staticwebassets\APIPacBomb.StaticWebAssets.xml
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.genruntimeconfig.cache
+D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.csprojAssemblyReference.cache
