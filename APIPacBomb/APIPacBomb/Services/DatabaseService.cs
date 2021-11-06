@@ -55,7 +55,7 @@ namespace APIPacBomb.Services
         ///   Liefert die geöffnete Datenbankverbindung zurück
         /// </summary>
         /// <returns>Datenbankverbindung</returns>
-        protected MySqlConnection _GetConnection()
+        protected MySqlConnection _SetConnection()
         {
             if (_dbConnection.State == ConnectionState.Closed || _dbConnection.State == ConnectionState.Broken)
             {
@@ -79,7 +79,7 @@ namespace APIPacBomb.Services
 
                 if (_CurrentConnectionRetries <= 5)
                 {                    
-                    return _GetConnection();
+                    return _SetConnection();
                 }
 
                 return null;
@@ -98,11 +98,8 @@ namespace APIPacBomb.Services
         /// <returns>Result-Set</returns>
         protected IEnumerable<IDataRecord> _ExecuteQuery(string query, List<KeyValuePair<string, string>> param)
         {
-            if (_dbCommand.Connection == null)
-            {
-                _GetConnection();
-            }
-
+            
+            _SetConnection();
             _dbCommand.CommandText = query;
             _dbCommand.Parameters.Clear();
 
@@ -134,10 +131,8 @@ namespace APIPacBomb.Services
         /// <param name="param">Kommandoparameter</param>
         protected void _ExecuteNonQuery(string cmdText, List<KeyValuePair<string, string>> param)
         {
-            if (_dbCommand.Connection == null)
-            {
-                _GetConnection();
-            }
+            
+            _SetConnection();            
 
             _dbCommand.CommandText = cmdText;
             _dbCommand.Parameters.Clear();

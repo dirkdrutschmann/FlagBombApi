@@ -47,8 +47,13 @@ namespace APIPacBomb
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 });
-
-            services.AddControllers();
+            
+            services.AddControllers().AddNewtonsoftJson(
+                options =>
+                {
+                    options.SerializerSettings.Converters.Add(new Classes.TileJsonConverter());
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
