@@ -1,20 +1,33 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace APIPacBomb.Model.Map
 {
     public class Grid
     {
+        [JsonProperty("width")]
+        public int Width { get; set; }
+
+        [JsonProperty("height")]
+        public int Heigth { get; set; }
+
+        [JsonProperty("columns")]
         public List<List<Tile>> Columns { get; private set; }
 
+        [JsonProperty("columnCount")]
         public int ColumnCount { get; set; }
 
+        [JsonProperty("rowCount")]
         public int RowCount { get; set; }
 
+        [JsonProperty("squareFactor")]
         public int SquareFactor { get; set; }
 
         public Grid(int width, int height, int squareFactor)
         {
+            Width = width;
+            Heigth = height;
             ColumnCount = width / squareFactor;
             RowCount = (height - 20) / squareFactor;
             SquareFactor = squareFactor;
@@ -29,7 +42,7 @@ namespace APIPacBomb.Model.Map
             for (int i = 0; i < this.ColumnCount; i++)
             {
                 Random random = new Random();
-                Type randomType = Type.Free;
+                Type randomType = Type.FREE;
 
                 row = new List<Tile>();
 
@@ -49,7 +62,7 @@ namespace APIPacBomb.Model.Map
                             new Tile(
                                 new Coord(i * SquareFactor, (k + 1) * SquareFactor),
                                 SquareFactor,
-                                Type.Free
+                                Type.FREE
                             )
                         );
                     }
@@ -57,7 +70,7 @@ namespace APIPacBomb.Model.Map
                     // Einrandung Flagge
                     else if
                     (
-                           (k == (RowCount / 2) - 1 || k == (RowCount / 2) + 1 && (i == 1 || i == 2 || i == 3 || i == ColumnCount - 2 || i == ColumnCount - 3 || i == ColumnCount - 4))
+                           ((k == (RowCount / 2) - 1 || k == (RowCount / 2) + 1) && (i == 1 || i == 2 || i == 3 || i == ColumnCount - 2 || i == ColumnCount - 3 || i == ColumnCount - 4))
                         || (k == RowCount / 2 && (i == 3 || i == ColumnCount - 4))
                     )
                     {
@@ -73,9 +86,18 @@ namespace APIPacBomb.Model.Map
                     // Rest zufällig
                     else
                     {
-                        Type t = randomType.Random();
+                        Type t;
 
-                        if (t == Type.Wall)
+                        if (random.Next(1, 100) % 7 == 0)
+                        {
+                            t = Type.FREE;
+                        }
+                        else
+                        {
+                            t = Type.WALL;
+                        }
+
+                        if (t == Type.WALL)
                         {
                             row.Add(
                                 new Wall(

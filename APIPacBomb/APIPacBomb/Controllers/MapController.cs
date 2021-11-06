@@ -20,7 +20,7 @@ namespace APIPacBomb.Controllers
             Model.Map.Grid grid = new Model.Map.Grid(mapSettings.Width, mapSettings.Height, mapSettings.SquareFactor);
             grid.GenerateMap();
 
-            return Ok(grid.Columns);
+            return Ok(grid);
         }
 
     }
