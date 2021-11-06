@@ -1,0 +1,239 @@
+{
+	"info": {
+		"_postman_id": "1793a80e-b9f9-494e-972f-c9a0be1bdc1a",
+		"name": "APIPacBom",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Exists Mail",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}}/register/mail/frantic88@gmx.de",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register",
+						"mail",
+						"frantic88@gmx.de"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Exists Username",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/register/user/frantic",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register",
+						"user",
+						"frantic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RegisterUser",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"frantic\",\r\n    \"prename\": \"Manuel\",\r\n    \"lastname\": \"Kumpf\",\r\n    \"email\": \"frantic88@gmx.de\",\r\n    \"password\": \"klaus\"    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n    \"username\": \"frantic\",\r\n    \"password\": \"klaus\"    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/Login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetValues",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/values",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"values"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUser",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/User/13",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"User",
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserPicture",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/User/13/picture",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"User",
+						"13",
+						"picture"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMap",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"width\": 1000,\r\n    \"height\": 1000,\r\n    \"squareFactor\": 30\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/Map",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"Map"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmFtZSI6ImZyYW50aWMiLCJleHAiOjE2MzYyMTcxNzcsImlzcyI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiIsImF1ZCI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiJ9.vQCTQ-jkU4JX08EuG6t6UGL3EGgBwl2mgQ9labKz5Ms",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:61339/api"
+		},
+		{
+			"key": "url",
+			"value": "http://dirkdrutschmann.de:61338/api",
+			"disabled": true
+		}
+	]
+}
