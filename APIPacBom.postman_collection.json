@@ -43,6 +43,35 @@
 				"method": "GET",
 				"header": [],
 				"url": {
+					"raw": "{{url}}/register/user/klaus",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register",
+						"user",
+						"klaus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RegisterUser",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"hans\",\r\n    \"prename\": \"Manuel\",\r\n    \"lastname\": \"Kumpf\",\r\n    \"email\": \"frantic8888@gmail.com\",\r\n    \"password\": \"klaus\"    \r\n}"
+				},
+				"url": {
 					"raw": "{{url}}/register/user/frantic",
 					"host": [
 						"{{url}}"
@@ -51,35 +80,6 @@
 						"register",
 						"user",
 						"frantic"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "RegisterUser",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"frantic\",\r\n    \"prename\": \"Manuel\",\r\n    \"lastname\": \"Kumpf\",\r\n    \"email\": \"frantic88@gmx.de\",\r\n    \"password\": \"klaus\"    \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}/register",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"register"
 					]
 				}
 			},
@@ -112,6 +112,33 @@
 			"response": []
 		},
 		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 13,\r\n    \"username\": \"frantic\",\r\n    \"email\": \"frantic88@gmx.de\",\r\n    \"password\": null,\r\n    \"secret\": null,\r\n    \"prename\": \"Manuel\",\r\n    \"lastname\": \"Kumpf\",\r\n    \"lastLogon\": \"2021-11-10T19:59:22\",\r\n    \"registrationOn\": \"2021-10-19T11:44:29\",\r\n    \"isAdmin\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/Login/Logout",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"Login",
+						"Logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GetValues",
 			"request": {
 				"method": "GET",
@@ -134,13 +161,30 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/User/13",
+					"raw": "{{url}}/User",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"User"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUsers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/User/All",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"User",
-						"13"
+						"All"
 					]
 				}
 			},
@@ -200,7 +244,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmFtZSI6ImZyYW50aWMiLCJleHAiOjE2MzYyMTcxNzcsImlzcyI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiIsImF1ZCI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiJ9.vQCTQ-jkU4JX08EuG6t6UGL3EGgBwl2mgQ9labKz5Ms",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmFtZSI6ImRpcmsiLCJleHAiOjE2MzY1ODk2NTgsImlzcyI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiIsImF1ZCI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiJ9.JpDclLEpYPlNVKY_vvKRMdOkkjiiWjZrnKQXbZ-S4O4",
 				"type": "string"
 			}
 		]
@@ -228,12 +272,12 @@
 	"variable": [
 		{
 			"key": "url",
-			"value": "http://localhost:61339/api"
+			"value": "http://localhost:61339/api",
+			"disabled": true
 		},
 		{
 			"key": "url",
-			"value": "http://dirkdrutschmann.de:61338/api",
-			"disabled": true
+			"value": "http://dirkdrutschmann.de:61338/api"
 		}
 	]
 }
