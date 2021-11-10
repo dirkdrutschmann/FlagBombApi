@@ -23,14 +23,17 @@ namespace APIPacBomb.Controllers
 
         private Interfaces.IUserDatabaseService _userDatabaseService;
 
+        private Interfaces.ISessionService _sessionService;
+
         /// <summary>
         ///   Erstellt eine Instanz des Logincontrollers
         /// </summary>
         /// <param name="config">Dependency Injection für Konfigurationsdaten</param>
-        public LoginController(IConfiguration config, Interfaces.IUserDatabaseService userDatabaseService)
+        public LoginController(IConfiguration config, Interfaces.IUserDatabaseService userDatabaseService, Interfaces.ISessionService sessionService)
         {
             _config = config;
             _userDatabaseService = userDatabaseService;
+            _sessionService = sessionService;
         }
 
         /// <summary>
@@ -51,10 +54,26 @@ namespace APIPacBomb.Controllers
                 var tokenString = _GenerateJSONWebToken(user);
                 user.LastLogon = DateTime.Now;
                 _userDatabaseService.SetUser(user);
+
+                _sessionService.AddLoggedinUser(user);
+
                 response = Ok(new { token = tokenString });
             }
 
             return response;
+        }
+
+        /// <summary>
+        ///   Abmelden eines Nutzers
+        ///   POST: api/Login
+        /// </summary>
+        /// <param name="login">Nutzerdaten</param>
+        /// <returns>true, wenn Nutzer in den angemeldeten Nutzern gefunden wurde und gelöscht werden konnte, sonst false.</returns>        
+        [Authorize]
+        [HttpPost("logout")]
+        public IActionResult Logout([FromBody] Model.User logout)
+        {
+            return Ok(_sessionService.RemoveLoggedinUser(logout));
         }
 
         /// <summary>

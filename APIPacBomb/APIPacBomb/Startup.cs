@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Logging;
 
 namespace APIPacBomb
 {
@@ -33,6 +34,7 @@ namespace APIPacBomb
 
             services.AddWebSocketManager();
             services.AddSingleton<Interfaces.IUserDatabaseService>(database);
+            services.AddSingleton<Interfaces.ISessionService, Services.SessionService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option => {
@@ -66,6 +68,8 @@ namespace APIPacBomb
 
             var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             var serviceProvider = serviceScopeFactory.CreateScope().ServiceProvider;
+
+
 
             app.UseHttpsRedirection();
 

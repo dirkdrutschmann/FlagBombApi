@@ -28,12 +28,6 @@ namespace APIPacBomb.Middleware
                 return;
             }
 
-            // Nur gesetzt wenn User eingeloggt ist            
-            if (string.IsNullOrEmpty(Classes.Util.GetUsernameFromToken(context)))
-            {
-                return;
-            }
-
             var socket = await context.WebSockets.AcceptWebSocketAsync();
             await _WebSocketHandler.OnConnected(socket);
 

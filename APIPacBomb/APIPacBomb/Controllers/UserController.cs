@@ -13,10 +13,12 @@ namespace APIPacBomb.Controllers
     public class UserController : ControllerBase
     {
         private Interfaces.IUserDatabaseService _userDatabaseService;
+        private Interfaces.ISessionService _sessionService;
 
-        public UserController(Interfaces.IUserDatabaseService userDatabaseService)
+        public UserController(Interfaces.IUserDatabaseService userDatabaseService, Interfaces.ISessionService sessionService)
         {
             _userDatabaseService = userDatabaseService;
+            _sessionService = sessionService;
         }
 
         // GET: api/User
@@ -24,7 +26,15 @@ namespace APIPacBomb.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_userDatabaseService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext)));            
+            return Ok(_userDatabaseService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext)));
+        }
+
+        // GET: api/User/All
+        [Authorize]
+        [HttpGet("All")]
+        public IActionResult GetAll()
+        {
+            return Ok(_sessionService.GetLoggedInUsers());
         }
 
         // GET: api/User/5
