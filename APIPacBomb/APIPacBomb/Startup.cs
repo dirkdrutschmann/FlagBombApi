@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace APIPacBomb
 {
@@ -56,6 +57,19 @@ namespace APIPacBomb
                     options.SerializerSettings.Converters.Add(new Classes.TileJsonConverter());
                 }
             );
+
+            services.AddSwaggerGen( opt => 
+            {
+                opt.SwaggerDoc("1.0", new OpenApiInfo()
+                {
+                    Version = "1.0",
+                    Title = "PacBomb API",
+                    Description = "API für PacBomb-Steuerung"
+                });
+                
+                var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                opt.IncludeXmlComments(System.IO.Path.Combine(System.AppContext.BaseDirectory, xmlFilename));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,6 +90,14 @@ namespace APIPacBomb
             app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(opt => 
+            {
+                opt.SwaggerEndpoint("/swagger/1.0/swagger.json", "1.0");
+                opt.RoutePrefix = string.Empty;
+            });
 
             app.UseAuthorization();
 

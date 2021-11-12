@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>APIPacBomb</name>
+    </assembly>
+    <members>
+        <member name="T:APIPacBomb.Classes.Util">
+            <summary>
+              Helferklasse
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Classes.Util.CLAIM_TYPE">
+            <summary>
+              Bezeichnung des CUSTOM-JWT-Claim
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Classes.Util.GenerateHash(System.String)">
+            <summary>
+              Generiert einen SHA256 Hash
+            </summary>
+            <param name="rawData">Zeichenkette, die gehasht werden soll</param>
+            <returns>Gehashte Zeichenkette</returns>
+        </member>
+        <member name="M:APIPacBomb.Classes.Util.GetUsernameFromToken(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+              Ließt den Nutzernamen aus einen JWT
+            </summary>
+            <param name="context">HTTP-Kontext</param>
+            <returns>Nutzername, wenn Claim im JWT gesetzt, sonst <code>string.Empty</code></returns>
+        </member>
+        <member name="F:APIPacBomb.Controllers.LoginController._config">
+            <summary>
+              Kofigurationsdaten
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Controllers.LoginController.#ctor(Microsoft.Extensions.Configuration.IConfiguration,APIPacBomb.Interfaces.IUserDatabaseService,APIPacBomb.Interfaces.ISessionService)">
+            <summary>
+              Erstellt eine Instanz des Logincontrollers
+            </summary>
+            <param name="config">Dependency Injection für Konfigurationsdaten</param>
+        </member>
+        <member name="M:APIPacBomb.Controllers.LoginController.Login(APIPacBomb.Model.User)">
+            <summary>
+              Einloggen eines Nutzers
+              POST: api/Login
+            </summary>
+            <param name="login">Nutzerdaten</param>
+            <returns>JWT</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.LoginController.Logout(APIPacBomb.Model.User)">
+            <summary>
+              Abmelden eines Nutzers
+              POST: api/Login
+            </summary>
+            <param name="login">Nutzerdaten</param>
+            <returns>true, wenn Nutzer in den angemeldeten Nutzern gefunden wurde und gelöscht werden konnte, sonst false.</returns>        
+        </member>
+        <member name="M:APIPacBomb.Controllers.LoginController._GenerateJSONWebToken(APIPacBomb.Model.User)">
+            <summary>
+              Erstellt den JWT
+            </summary>
+            <param name="user">Anzumeldender Nutzer</param>
+            <returns>JWT</returns>
+        </member>
+        <member name="P:APIPacBomb.Model.User.Id">
+            <summary>
+              Nutzer-Id
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.Username">
+            <summary>
+              Nutzername
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.Email">
+            <summary>
+              E-Mailadresse
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.Password">
+            <summary>
+              Passwort
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.Secret">
+            <summary>
+              Secret
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.Prename">
+            <summary>
+              Vorname
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.Lastname">
+            <summary>
+              Nachname
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.LastLogon">
+            <summary>
+              Lezter Login
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.RegistrationOn">
+            <summary>
+              Registrierungszeitpunkt
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.IsAdmin">
+            <summary>
+              <code>true</code>, wenn Nutzer Adminstatus hat, sonst <code>false</code>
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Model.User.GeneratePasswordHash">
+            <summary>
+              Erzeugt das Passwort mit Hilfe der Rohdaten und dem zufälligen Secret
+            </summary>        
+        </member>
+        <member name="M:APIPacBomb.Model.User.GeneratePasswordHash(System.String,System.String)">
+            <summary>
+              Erzeugt das Passwort mit Hilfe der Rohdaten und dem zufälligen Secret
+            </summary>
+            <param name="password">Passwort in Klartext</param>
+            <param name="secret">Zufälliges Secret</param>
+            <returns>Gehashted Passwort</returns>
+        </member>
+        <member name="F:APIPacBomb.Services.DatabaseService._dbConnection">
+            <summary>
+              Datenbankverbindung
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Services.DatabaseService._dbCommand">
+            <summary>
+              Datenbankcommand
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Services.DatabaseService._ConnectionString">
+            <summary>
+              Verbindungszeichenkette
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Services.DatabaseService._CurrentConnectionRetries">
+            <summary>
+              Verbindungsversuche
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Services.DatabaseService.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+              Erstellt eine Instanz des Datenbankdienstes
+            </summary>
+            <param name="user">DB-Nutzername</param>
+            <param name="pass">DB-Passwort</param>
+            <param name="server">DB-Server</param>
+            <param name="database">DB-Name</param>
+        </member>
+        <member name="M:APIPacBomb.Services.DatabaseService._SetConnection">
+            <summary>
+              Liefert die geöffnete Datenbankverbindung zurück
+            </summary>
+            <returns>Datenbankverbindung</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.DatabaseService._ExecuteQuery(System.String,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+              Liefert das Result-Set als abzählbare Recordsammlung
+            </summary>
+            <param name="query">Abfrage</param>
+            <param name="param">Abfrageparameter</param>
+            <returns>Result-Set</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.DatabaseService._ExecuteNonQuery(System.String,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+              Führt ein Nichtabfrage-Statement aus
+            </summary>
+            <param name="cmdText">Kommando</param>
+            <param name="param">Kommandoparameter</param>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+              Erstellt eine Instanz des Datenbankdienstes
+            </summary>
+            <param name="user">DB-Nutzername</param>
+            <param name="pass">DB-Passwort</param>
+            <param name="server">DB-Server</param>
+            <param name="database">DB-Name</param>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService.ExistsMail(System.String)">
+            <summary>
+              Liefert <code>true</code> zurück, wenn die übergebene Mail bereits in der users-Tabelle existiert,
+              sonst <code>false</code>
+            </summary>
+            <param name="mail">E-Mailadresse</param>
+            <returns><code>true</code>/<code>false</code></returns>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService.ExistsUsername(System.String)">
+            <summary>
+              Liefert <code>true</code> zurück, wenn der übergebene Nutzername bereits in der users-Tabelle existiert,
+              sonst <code>false</code>
+            </summary>
+            <param name="username">Nutzername</param>
+            <returns><code>true</code>/<code>false</code></returns>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService.RegisterUser(APIPacBomb.Model.User)">
+            <summary>
+              Legt einen neuen Nutzer an und liefert diesen als Instanz der User-Klasse zurück
+            </summary>
+            <param name="user">Userinformationen</param>
+            <returns>Neuer Nutzer</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService.GetUser(System.String)">
+            <summary>
+              Liefert den Nutzer mit entsprechenden Nutzernamen oder E-Mailadresse zurück
+            </summary>
+            <param name="usernameOrMail">Nutzername oder E-Mailadresse</param>
+            <returns>Ermittelter Nutzer oder null, wenn kein Nutzer gefunden wurde</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService.GetUserPicture(System.Int32)">
+            <summary>
+              Liefert das Nutzerbild als Base64-kodierter String
+            </summary>
+            <param name="id">User-Id</param>
+            <returns>Base64-kodierter String</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService.SetUser(APIPacBomb.Model.User)">
+            <summary>
+              Ändert Nutzerinformationen
+            </summary>
+            <param name="user"></param>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService.Authenticate(APIPacBomb.Model.User)">
+            <summary>
+              Führt die Authentifizierung des Nutzers durch
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService._GenerateUserObject(System.Collections.Generic.IEnumerable{System.Data.IDataRecord})">
+            <summary>
+              Liefert anhand des übergebene Record ein Nutzerobjekt
+            </summary>
+            <param name="records">Resultset</param>
+            <returns>Instanz eines Nutzers</returns>
+        </member>
+    </members>
+</doc>

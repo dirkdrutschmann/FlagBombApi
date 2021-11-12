@@ -435,5 +435,11 @@ D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.cspr
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+D:\temp\PacBombApi\APIPacBomb\APIPacBomb\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
+D:\temp\PacBombApi\APIPacBomb\APIPacBomb\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
+D:\temp\PacBombApi\APIPacBomb\APIPacBomb\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\temp\PacBombApi\APIPacBomb\APIPacBomb\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.csproj.CoreCompileInputs.cache
+D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.MvcApplicationPartsAssemblyInfo.cs
 D:\temp\PacBombApi\APIPacBomb\APIPacBomb\obj\Debug\netcoreapp3.1\APIPacBomb.MvcApplicationPartsAssemblyInfo.cache
+D:\temp\PacBombApi\APIPacBomb\APIPacBomb\bin\Debug\netcoreapp3.1\APIPacBomb.xml
