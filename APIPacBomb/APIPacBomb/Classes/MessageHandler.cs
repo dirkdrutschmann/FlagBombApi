@@ -10,15 +10,20 @@ namespace APIPacBomb.Classes
 {
     public class MessageHandler : WebSocketHandler
     {
-        public MessageHandler(ConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
+        private Interfaces.ISessionService _sessionService;
+
+        public MessageHandler(ConnectionManager webSocketConnectionManager, Interfaces.ISessionService sessionService) : base(webSocketConnectionManager)
         {
+            _sessionService = sessionService;
         }
 
         public override async Task OnConnected(WebSocket socket)
         {
-            await base.OnConnected(socket);
+            await base.OnConnected(socket);            
 
-            var socketId = WebSocketConnectionManager.GetId(socket);
+            var socketId = WebSocketConnectionManager.GetId(socket);     
+                       
+
             await SendMessageToAllAsync($"{socketId} is now connected");
         }
 

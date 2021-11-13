@@ -10,11 +10,12 @@ namespace APIPacBomb.Middleware
 {
     public abstract class WebSocketHandler
     {
-        protected ConnectionManager WebSocketConnectionManager { get; set; }
+        protected ConnectionManager WebSocketConnectionManager { get; set; }        
 
         public WebSocketHandler(ConnectionManager webSocketConnectionManager)
         {
             WebSocketConnectionManager = webSocketConnectionManager;
+            
         }
 
         public virtual async Task OnConnected(WebSocket socket)

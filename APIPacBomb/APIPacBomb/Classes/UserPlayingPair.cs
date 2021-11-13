@@ -42,6 +42,19 @@ namespace APIPacBomb.Classes
         public PlayingStatus Status { get; set; }
 
         /// <summary>
+        ///   IP-Adresse von der die Anfrage kommt
+        /// </summary>
+        [JsonIgnore]
+        public string RequestedIP { get; set; }
+
+        /// <summary>
+        ///   IP-Adresse an die die Anfrage geht
+        /// </summary>
+        [JsonIgnore]
+        public string RequestingIP { get; set; }
+
+
+        /// <summary>
         ///   Erstellt eine Instanz der UserPlayingPairs-Klasse
         /// </summary>
         public UserPlayingPair()

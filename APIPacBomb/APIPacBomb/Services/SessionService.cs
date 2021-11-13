@@ -1,8 +1,10 @@
 ﻿using APIPacBomb.Classes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
 
 namespace APIPacBomb.Services
@@ -102,7 +104,8 @@ namespace APIPacBomb.Services
         /// </summary>
         /// <param name="user">Anfragender Nutzer</param>
         /// <param name="requestedUserId">Angefragter Nutzer</param>
-        public void SendPlayRequest(Model.User user, int requestedUserId)
+        /// <param name="context">HTTP-Context der Anfrage</param>
+        public void SendPlayRequest(Model.User user, int requestedUserId, Microsoft.AspNetCore.Http.HttpContext context)
         {
             // Check if requesting User is logged in
             if (_GetIndexOf(user) < 0)
@@ -124,7 +127,12 @@ namespace APIPacBomb.Services
                 throw new Classes.Exceptions.PlayRequestAlreadyExistsException("Anfrage bereits an UserId " + requestedUserId + " gesendet.");
             }
 
-            _userPlayingPairs.Add(new UserPlayingPair(user, _LoggedinUsers[indexOfRequestedUser]));
+            _userPlayingPairs.Add(
+                new UserPlayingPair(user, _LoggedinUsers[indexOfRequestedUser])
+                {
+                    RequestedIP = context.Connection.RemoteIpAddress.MapToIPv4().ToString()
+                }
+            );
 
             _logger.LogInformation(string.Format("Spieleanfrage von UserId {0} an UserId {1} gestellt.", user.Id.ToString(), requestedUserId.ToString()));
         }
@@ -165,9 +173,13 @@ namespace APIPacBomb.Services
         /// </summary>
         /// <param name="user">Akzeptierender Nutzer</param>
         /// <param name="requestingUserId">UserId des anfragenden Nutzers</param>
-        public void AcceptPlayRequest(Model.User user, int requestingUserId)
+        public void AcceptPlayRequest(Model.User user, int requestingUserId, HttpContext context)
         {
-            _SetStatus(_GetIndexOfPlayingPair(GetUser(requestingUserId), user), UserPlayingPair.PlayingStatus.ACCEPTED);
+            int index = _GetIndexOfPlayingPair(GetUser(requestingUserId), user);
+
+            _userPlayingPairs[index].RequestingIP = context.Connection.RemoteIpAddress.MapToIPv4().ToString();
+
+            _SetStatus(index, UserPlayingPair.PlayingStatus.ACCEPTED);
         }
 
         /// <summary>
@@ -179,7 +191,6 @@ namespace APIPacBomb.Services
         {
             _SetStatus(_GetIndexOfPlayingPair(GetUser(requestingUserId), user), UserPlayingPair.PlayingStatus.REJECTED);
         }
-
 
         /// <summary>
         ///   Liefert den Nutzer anhand seines Nutzernamens zurück
@@ -199,6 +210,82 @@ namespace APIPacBomb.Services
         public Model.User GetUser(int userId)
         {
             return _LoggedinUsers[_GetIndexOf(userId)];
+        }
+
+        /// <summary>
+        ///   Setzt die Websocket-Instanz für einen Spieler eines Spielerpaares
+        /// </summary>
+        /// <param name="socket">WebSocket</param>
+        /// <param name="playingPairId">Id des Spielerpaars</param>
+        /// <param name="userId">UserId des Spielers</param>
+        /// <param name="context">HTTP-Context</param>
+        public void SetWebSocket(WebSocket socket, string playingPairId, int userId, HttpContext context)
+        {
+            int i = _GetIndexOfPlayingPair(playingPairId);
+
+            if (i < 0)
+            {
+                throw new Classes.Exceptions.PlayingPairNotFoundException("Spielpaarung nicht gefunden.");
+            }
+
+            string remoteIp = context.Connection.RemoteIpAddress.MapToIPv4().ToString();
+
+            if (_userPlayingPairs[i].RequestedIP != remoteIp && _userPlayingPairs[i].RequestingIP != remoteIp)
+            {
+                _logger.LogWarning(string.Format("IP {0} versucht auf andere Spielpaarung zuzugreifen.", remoteIp));
+                throw new Classes.Exceptions.PlayingPairNotFoundException("Spielpaarung nicht gefunden");
+            }
+
+            if (_userPlayingPairs[i].RequestedUser.Id == userId)
+            {
+                _userPlayingPairs[i].RequestedUser.WebSocket = socket;
+            }
+            else if (_userPlayingPairs[i].RequestingUser.Id == userId)
+            {
+                _userPlayingPairs[i].RequestingUser.WebSocket = socket;
+            }
+        }
+
+        /// <summary>
+        ///   Liefert den WebSocket des Partners der Spielpaarung
+        /// </summary>
+        /// <param name="playingPairId">Id des Spielerpaars</param>
+        /// <param name="userId">UserId des Spieler</param>
+        /// <returns>WebSocket des Partners von userId</returns>
+        public WebSocket GetPartnerWebSocket(string playingPairId, int userId)
+        {
+            int i = _GetIndexOfPlayingPair(playingPairId);
+
+            if (i < 0)
+            {
+                throw new Classes.Exceptions.PlayingPairNotFoundException("Spielerpaarung nicht gefunden.");
+            }
+
+            if (_userPlayingPairs[i].RequestedUser.Id == userId)
+            {
+                return _userPlayingPairs[i].RequestingUser.WebSocket;
+            }
+            else
+            {
+                return _userPlayingPairs[i].RequestedUser.WebSocket;
+            }
+        }
+
+        /// <summary>
+        ///   Liefert eine Spielpaarung zurück
+        /// </summary>
+        /// <param name="playingPairId">Id des Spielerpaars</param>
+        /// <returns>Spielerpaarung</returns>
+        public UserPlayingPair GetUserPlayingPair(string playingPairId)
+        {
+            int i = _GetIndexOfPlayingPair(playingPairId);
+
+            if (i < 0)
+            {
+                throw new Classes.Exceptions.PlayingPairNotFoundException("Spielpaarung nicht gefunden");
+            }
+
+            return _userPlayingPairs[i];
         }
 
         /// <summary>
@@ -230,6 +317,16 @@ namespace APIPacBomb.Services
         private int _GetIndexOfPlayingPair(Model.User requestingUser, Model.User requestedUser)
         {
             return _userPlayingPairs.FindIndex(pair => pair.RequestingUser.Id == requestingUser.Id && pair.RequestedUser.Id == requestedUser.Id);
+        }
+
+        /// <summary>
+        ///   Liefert den Index aus den UserPlayingPairs
+        /// </summary>
+        /// <param name="id">Id des PlayingPairs</param>
+        /// <returns></returns>
+        private int _GetIndexOfPlayingPair(string id)
+        {
+            return _userPlayingPairs.FindIndex(pair => pair.Id.ToString() == id);
         }
 
         /// <summary>

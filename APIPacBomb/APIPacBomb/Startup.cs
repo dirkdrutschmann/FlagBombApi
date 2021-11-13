@@ -30,12 +30,12 @@ namespace APIPacBomb
                     Configuration["Db:pass"],
                     Configuration["Db:server"],
                     Configuration["Db:database"]
-                );
+                );            
 
-
-            services.AddWebSocketManager();
             services.AddSingleton<Interfaces.IUserDatabaseService>(database);
             services.AddSingleton<Interfaces.ISessionService, Services.SessionService>();
+
+            //services.AddWebSocketManager();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option => {
@@ -80,10 +80,8 @@ namespace APIPacBomb
                 app.UseDeveloperExceptionPage();
             }
 
-            var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
-            var serviceProvider = serviceScopeFactory.CreateScope().ServiceProvider;
-
-
+            //var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            //var serviceProvider = serviceScopeFactory.CreateScope().ServiceProvider;
 
             app.UseHttpsRedirection();
 
@@ -103,7 +101,7 @@ namespace APIPacBomb
 
             app.UseWebSockets();
 
-            app.MapWebSocketManger("/api/ws", serviceProvider.GetService<Classes.MessageHandler>());
+            //app.MapWebSocketManger("/api/game/ws", serviceProvider.GetService<Classes.MessageHandler>());
 
             app.UseEndpoints(endpoints =>
             {

@@ -82,6 +82,16 @@
               Status des Paares
             </summary>
         </member>
+        <member name="P:APIPacBomb.Classes.UserPlayingPair.RequestedIP">
+            <summary>
+              IP-Adresse von der die Anfrage kommt
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.UserPlayingPair.RequestingIP">
+            <summary>
+              IP-Adresse an die die Anfrage geht
+            </summary>
+        </member>
         <member name="M:APIPacBomb.Classes.UserPlayingPair.#ctor">
             <summary>
               Erstellt eine Instanz der UserPlayingPairs-Klasse
@@ -144,6 +154,27 @@
             </summary>
             <param name="context">HTTP-Kontext</param>
             <returns>Nutzername, wenn Claim im JWT gesetzt, sonst <code>string.Empty</code></returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.GameController.#ctor(APIPacBomb.Interfaces.ISessionService)">
+            <summary>
+              Erstellt eine Instanz der Game-Controller-Klasse
+            </summary>
+            <param name="sessionService">SessionService-Instanz</param>
+        </member>
+        <member name="M:APIPacBomb.Controllers.GameController.Get(APIPacBomb.Classes.Requests.MapRequest)">
+            <summary>
+              Generiert die Map
+            </summary>
+            <param name="mapSettings">Map-Settings</param>
+            <returns>Map-Grid</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.GameController.Get(System.String,System.Int32)">
+            <summary>
+              Initialisiert den WebSocket
+            </summary>
+            <param name="playingPairId">Spielerpaar-Id</param>
+            <param name="userId">Eigene User-Id</param>
+            <returns></returns>
         </member>
         <member name="F:APIPacBomb.Controllers.LoginController._config">
             <summary>
@@ -290,7 +321,7 @@
         <member name="P:APIPacBomb.Model.User.Password">
             <summary>
               Passwort
-            </summary>
+            </summary>        
         </member>
         <member name="P:APIPacBomb.Model.User.Secret">
             <summary>
@@ -320,6 +351,11 @@
         <member name="P:APIPacBomb.Model.User.IsAdmin">
             <summary>
               <code>true</code>, wenn Nutzer Adminstatus hat, sonst <code>false</code>
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.User.WebSocket">
+            <summary>
+              WebSocket-Instanz
             </summary>
         </member>
         <member name="M:APIPacBomb.Model.User.GeneratePasswordHash">
@@ -420,12 +456,13 @@
             </summary>
             <returns>Liste der angemeldeten Nutzer</returns>
         </member>
-        <member name="M:APIPacBomb.Services.SessionService.SendPlayRequest(APIPacBomb.Model.User,System.Int32)">
+        <member name="M:APIPacBomb.Services.SessionService.SendPlayRequest(APIPacBomb.Model.User,System.Int32,Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
               Sendet eine Spielanfrage an einen Nutzer
             </summary>
             <param name="user">Anfragender Nutzer</param>
             <param name="requestedUserId">Angefragter Nutzer</param>
+            <param name="context">HTTP-Context der Anfrage</param>
         </member>
         <member name="M:APIPacBomb.Services.SessionService.GetPlayRequest(APIPacBomb.Model.User,System.Boolean)">
             <summary>
@@ -435,7 +472,7 @@
             <param name="outgoing">false, wenn die eingegangen Anfragen ermittelt werden sollen. true, wenn die ausgehenden Anfragen ermittelt werden</param>
             <returns>Liste der Anfragen</returns>
         </member>
-        <member name="M:APIPacBomb.Services.SessionService.AcceptPlayRequest(APIPacBomb.Model.User,System.Int32)">
+        <member name="M:APIPacBomb.Services.SessionService.AcceptPlayRequest(APIPacBomb.Model.User,System.Int32,Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
               Akzeptiert eine Spieleanfrage
             </summary>
@@ -463,6 +500,30 @@
             <param name="userId">UserId</param>
             <returns>Instanz der Userklsse</returns>
         </member>
+        <member name="M:APIPacBomb.Services.SessionService.SetWebSocket(System.Net.WebSockets.WebSocket,System.String,System.Int32,Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+              Setzt die Websocket-Instanz für einen Spieler eines Spielerpaares
+            </summary>
+            <param name="socket">WebSocket</param>
+            <param name="playingPairId">Id des Spielerpaars</param>
+            <param name="userId">UserId des Spielers</param>
+            <param name="context">HTTP-Context</param>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.GetPartnerWebSocket(System.String,System.Int32)">
+            <summary>
+              Liefert den WebSocket des Partners der Spielpaarung
+            </summary>
+            <param name="playingPairId">Id des Spielerpaars</param>
+            <param name="userId">UserId des Spieler</param>
+            <returns>WebSocket des Partners von userId</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.GetUserPlayingPair(System.String)">
+            <summary>
+              Liefert eine Spielpaarung zurück
+            </summary>
+            <param name="playingPairId">Id des Spielerpaars</param>
+            <returns>Spielerpaarung</returns>
+        </member>
         <member name="M:APIPacBomb.Services.SessionService._GetIndexOf(APIPacBomb.Model.User)">
             <summary>
               Liefert den Index aus den LoggedInUsers
@@ -484,6 +545,13 @@
             <param name="requestingUser">Anfragender Nutzer</param>
             <param name="requestedUser">Angefragter Nutzer</param>
             <returns>0-basierender Index, wenn nicht gefunden -1</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService._GetIndexOfPlayingPair(System.String)">
+            <summary>
+              Liefert den Index aus den UserPlayingPairs
+            </summary>
+            <param name="id">Id des PlayingPairs</param>
+            <returns></returns>
         </member>
         <member name="M:APIPacBomb.Services.SessionService._SetStatus(System.Int32,APIPacBomb.Classes.UserPlayingPair.PlayingStatus)">
             <summary>

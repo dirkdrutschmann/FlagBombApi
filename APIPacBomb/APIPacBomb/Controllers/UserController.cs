@@ -18,7 +18,7 @@ namespace APIPacBomb.Controllers
     {
         private Interfaces.IUserDatabaseService _userDatabaseService;
         private Interfaces.ISessionService _sessionService;
-        private ILogger<UserController> _Logger;
+        private ILogger<UserController> _Logger;        
 
         /// <summary>
         ///  Erzeugt eine Instanz der Controllerklasse
@@ -30,7 +30,7 @@ namespace APIPacBomb.Controllers
         {
             _userDatabaseService = userDatabaseService;
             _sessionService = sessionService;
-            _Logger = logger;
+            _Logger = logger;            
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace APIPacBomb.Controllers
 
             try
             {
-                _sessionService.SendPlayRequest(user, id);
+                _sessionService.SendPlayRequest(user, id, HttpContext);
 
                 response.Success = true;
                 response.Message = string.Format("Spieleanfrage erfolgreich an {0} gesendet.", _sessionService.GetUser(id).Username);
@@ -147,13 +147,15 @@ namespace APIPacBomb.Controllers
         /// <returns>StdResponse</returns>
         [Authorize]
         [HttpPost("AcceptPlayRequest/{id}")]
-        public IActionResult PostAcceptPlayRequest(int id)
+        public async Task<IActionResult> PostAcceptPlayRequest(int id)
         {
             Model.User requestedUser = _sessionService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext));            
 
             try
             {
-                _sessionService.AcceptPlayRequest(requestedUser, id);
+                _sessionService.AcceptPlayRequest(requestedUser, id, HttpContext);
+                _Logger.LogInformation(string.Format("Spieleanfrage von UserId {0} durch UserId {1} akzeptiert.", id.ToString(), requestedUser.Id.ToString()));                
+
             }
             catch (Classes.Exceptions.PlayingPairNotFoundException e)
             {
@@ -173,8 +175,7 @@ namespace APIPacBomb.Controllers
                 return BadRequest(new Classes.Responses.StdResponse(false, "Unerwarteter Fehler beim Akzeptieren der Spieleanfrage."));
             }
 
-            _Logger.LogInformation(string.Format("Spieleanfrage von UserId {0} durch UserId {1} akzeptiert.", id.ToString(), requestedUser.Id.ToString()));
-
+            
             return Ok(new Classes.Responses.StdResponse(true, "Spielanfrage akzeptiert."));
             
         }
