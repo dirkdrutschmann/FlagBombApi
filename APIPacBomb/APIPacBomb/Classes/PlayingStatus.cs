@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,27 +15,28 @@ namespace APIPacBomb.Classes
         /// <summary>
         ///   Status eines Spielerpaares
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum PlayingStatus
         {
             /// <summary>
             ///   Anfrage gesendet
             /// </summary>
-            Requested,
+            REQUESTED,
 
             /// <summary>
             ///   Anfrage angenommen
             /// </summary>
-            Accepted,
+            ACCEPTED,
 
             /// <summary>
             ///   Anfrage abgelehnt
             /// </summary>
-            Rejected,
+            REJECTED,
 
             /// <summary>
             ///   Im Spiel
             /// </summary>
-            InGame
+            IN_GAME
         }
     }
 }

@@ -150,7 +150,7 @@ namespace APIPacBomb.Services
                 if 
                 (
                     ((!outgoing && request.RequestedUser.Id == user.Id) || (outgoing && request.RequestingUser.Id == user.Id)) &&
-                    (request.Status == UserPlayingPair.PlayingStatus.Requested || request.Status == UserPlayingPair.PlayingStatus.Accepted)
+                    (request.Status == UserPlayingPair.PlayingStatus.REQUESTED || request.Status == UserPlayingPair.PlayingStatus.ACCEPTED)
                 )
                 {
                     requests.Add(request);
@@ -167,7 +167,7 @@ namespace APIPacBomb.Services
         /// <param name="requestingUserId">UserId des anfragenden Nutzers</param>
         public void AcceptPlayRequest(Model.User user, int requestingUserId)
         {
-            _SetStatus(_GetIndexOfPlayingPair(GetUser(requestingUserId), user), UserPlayingPair.PlayingStatus.Accepted);
+            _SetStatus(_GetIndexOfPlayingPair(GetUser(requestingUserId), user), UserPlayingPair.PlayingStatus.ACCEPTED);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace APIPacBomb.Services
         /// <param name="requestingUserId">UserId des anfragenden Nutzers</param>
         public void RejectPlayRequest(Model.User user, int requestingUserId)
         {
-            _SetStatus(_GetIndexOfPlayingPair(GetUser(requestingUserId), user), UserPlayingPair.PlayingStatus.Rejected);
+            _SetStatus(_GetIndexOfPlayingPair(GetUser(requestingUserId), user), UserPlayingPair.PlayingStatus.REJECTED);
         }
 
 
@@ -244,6 +244,20 @@ namespace APIPacBomb.Services
                 throw new Classes.Exceptions.PlayingPairNotFoundException("Spielanfrage konnte nicht gefunden werden.");
             }
 
+            UserPlayingPair pair = _userPlayingPairs[index];
+
+            if (pair.Status == status)
+            {
+                throw new Classes.Exceptions.StateAlreadySetException(
+                    string.Format(
+                        "Spieleanfrage von {0} an {1} hat bereits den Status {2}.",
+                        pair.RequestingUser.Username,
+                        pair.RequestedUser.Username,
+                        status.ToString()
+                    )
+                );
+            }
+
             _userPlayingPairs[index].Status = status;
         }
 
@@ -260,7 +274,7 @@ namespace APIPacBomb.Services
                 {
                     pair = _userPlayingPairs[i];
 
-                    if (pair.Status == UserPlayingPair.PlayingStatus.Accepted || pair.Status == UserPlayingPair.PlayingStatus.InGame)
+                    if (pair.Status == UserPlayingPair.PlayingStatus.ACCEPTED || pair.Status == UserPlayingPair.PlayingStatus.IN_GAME)
                     {
                         continue;
                     }

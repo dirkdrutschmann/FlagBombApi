@@ -48,7 +48,7 @@ namespace APIPacBomb.Classes
         {
             Id = Guid.NewGuid();
             RequestTime = DateTime.Now;
-            Status = PlayingStatus.Requested;
+            Status = PlayingStatus.REQUESTED;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace APIPacBomb.Classes
             RequestingUser = requestingUser;
             RequestedUser = requestedUser;
             RequestTime = DateTime.Now;
-            Status = PlayingStatus.Requested;
+            Status = PlayingStatus.REQUESTED;
         }
     }
 }

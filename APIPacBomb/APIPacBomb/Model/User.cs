@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace APIPacBomb.Model
 {
+    /// <summary>
+    ///   User-Klasse
+    /// </summary>
     public class User
     {
         private const string INTERNAL_SECRET = "3WTql?7~GlQha332yd3K&P$%#3aE/3EoS&qe";

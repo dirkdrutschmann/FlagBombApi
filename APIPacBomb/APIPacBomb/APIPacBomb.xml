@@ -19,6 +19,11 @@
               Ausnahme wenn Spieleanfrage bereits eingeleitet wurde
             </summary>
         </member>
+        <member name="T:APIPacBomb.Classes.Exceptions.StateAlreadySetException">
+            <summary>
+              Ausnahme wenn Nutzer nicht angemeldet ist
+            </summary>
+        </member>
         <member name="T:APIPacBomb.Classes.UserPlayingPair">
             <summary>
               Klasse der Nutzeranfragen-Paare
@@ -32,22 +37,22 @@
               Status eines Spielerpaares
             </summary>
         </member>
-        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.Requested">
+        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.REQUESTED">
             <summary>
               Anfrage gesendet
             </summary>
         </member>
-        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.Accepted">
+        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.ACCEPTED">
             <summary>
               Anfrage angenommen
             </summary>
         </member>
-        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.Rejected">
+        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.REJECTED">
             <summary>
               Anfrage abgelehnt
             </summary>
         </member>
-        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.InGame">
+        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.IN_GAME">
             <summary>
               Im Spiel
             </summary>
@@ -206,7 +211,7 @@
             <param name="id">UserId</param>
             <returns>Standardresponse</returns>
         </member>
-        <member name="M:APIPacBomb.Controllers.UserController.GetPlayRequest">
+        <member name="M:APIPacBomb.Controllers.UserController.GetIncomingPlayRequest">
             <summary>
               Liefert alle Anfragen, die an einen selbst gestellt wurden
             </summary>        
@@ -246,6 +251,26 @@
             </summary>
             <param name="id">UserId</param>
             <returns>BASE64-kodiertes Bild</returns>
+        </member>
+        <member name="T:APIPacBomb.Model.Map.Type">
+            <summary>
+              Typen auf dem Grid
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Model.Map.Type.WALL">
+            <summary>
+              Wand
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Model.Map.Type.FREE">
+            <summary>
+              Freies Feld
+            </summary>
+        </member>
+        <member name="T:APIPacBomb.Model.User">
+            <summary>
+              User-Klasse
+            </summary>
         </member>
         <member name="P:APIPacBomb.Model.User.Id">
             <summary>

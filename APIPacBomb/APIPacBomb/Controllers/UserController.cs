@@ -120,7 +120,7 @@ namespace APIPacBomb.Controllers
         /// <returns>Liste der Spieleanfragen</returns>
         [Authorize]
         [HttpGet("PlayRequest/Incoming")]
-        public IActionResult GetPlayRequest()
+        public IActionResult GetIncomingPlayRequest()
         {
             Model.User user = _sessionService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext));
 
@@ -161,6 +161,11 @@ namespace APIPacBomb.Controllers
 
                 return BadRequest(new Classes.Responses.StdResponse(false, e.Message));
             }
+            catch (Classes.Exceptions.StateAlreadySetException e)
+            {
+                _Logger.LogError(e, string.Format("Spieleanfrage zum Akzptieren von UserId {0} an UserId {1} wurde bereits akzeptiert.", id.ToString(), requestedUser.Id.ToString()));
+                return BadRequest(new Classes.Responses.StdResponse(false, e.Message));
+            }
             catch (Exception e)
             {
                 _Logger.LogError(e, string.Format("Unerwarteter Fehler beim Akzeptieren der Spieleanfrage von UserId {0} and UserId {1}.", id.ToString(), requestedUser.Id.ToString()));
@@ -193,6 +198,11 @@ namespace APIPacBomb.Controllers
             {
                 _Logger.LogError(e, string.Format("Spieleanfrage zum Ablehnen von UserId {0} an UserId {1} konnte nicht gefunden werden.", id.ToString(), requestedUser.Id.ToString()));
 
+                return BadRequest(new Classes.Responses.StdResponse(false, e.Message));
+            }
+            catch (Classes.Exceptions.StateAlreadySetException e)
+            {
+                _Logger.LogError(e, string.Format("Spieleanfrage zum Ablehnen von UserId {0} an UserId {1} wurde bereits abgelehnt.", id.ToString(), requestedUser.Id.ToString()));
                 return BadRequest(new Classes.Responses.StdResponse(false, e.Message));
             }
             catch (Exception e)
