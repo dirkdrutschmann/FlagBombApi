@@ -4,6 +4,118 @@
         <name>APIPacBomb</name>
     </assembly>
     <members>
+        <member name="T:APIPacBomb.Classes.Exceptions.NotLoggedInException">
+            <summary>
+              Ausnahme wenn Nutzer nicht angemeldet ist
+            </summary>
+        </member>
+        <member name="T:APIPacBomb.Classes.Exceptions.PlayingPairNotFoundException">
+            <summary>
+              Ausnahme wenn Nutzer nicht angemeldet ist
+            </summary>
+        </member>
+        <member name="T:APIPacBomb.Classes.Exceptions.PlayRequestAlreadyExistsException">
+            <summary>
+              Ausnahme wenn Spieleanfrage bereits eingeleitet wurde
+            </summary>
+        </member>
+        <member name="T:APIPacBomb.Classes.UserPlayingPair">
+            <summary>
+              Klasse der Nutzeranfragen-Paare
+            </summary>
+            <summary>
+              Klasse der Nutzeranfragen-Paare
+            </summary>
+        </member>
+        <member name="T:APIPacBomb.Classes.UserPlayingPair.PlayingStatus">
+            <summary>
+              Status eines Spielerpaares
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.Requested">
+            <summary>
+              Anfrage gesendet
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.Accepted">
+            <summary>
+              Anfrage angenommen
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.Rejected">
+            <summary>
+              Anfrage abgelehnt
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.InGame">
+            <summary>
+              Im Spiel
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.UserPlayingPair.Id">
+            <summary>
+              Eindeutige Id des Spielerpaares
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.UserPlayingPair.RequestingUser">
+            <summary>
+              Anfragender Nutzer
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.UserPlayingPair.RequestedUser">
+            <summary>
+              Angefragter Nutzer
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.UserPlayingPair.RequestTime">
+            <summary>
+              Zeitpunkt der Anfragestellung
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.UserPlayingPair.Status">
+            <summary>
+              Status des Paares
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Classes.UserPlayingPair.#ctor">
+            <summary>
+              Erstellt eine Instanz der UserPlayingPairs-Klasse
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Classes.UserPlayingPair.#ctor(APIPacBomb.Model.User,APIPacBomb.Model.User)">
+            <summary>
+              Erstellt eine Instanz der UserPlayingPairs-Klasse
+            </summary>
+            <param name="requestingUser">Anfragender Nutzer</param>
+            <param name="requestedUser">Angefragter Nutzer</param>
+        </member>
+        <member name="T:APIPacBomb.Classes.Responses.StdResponse">
+            <summary>
+              Klasse für Standard-Antworten vom Server
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Responses.StdResponse.Success">
+            <summary>
+              Erfolgsindikator
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Responses.StdResponse.Message">
+            <summary>
+              Nachricht an den Client
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Classes.Responses.StdResponse.#ctor">
+            <summary>
+              Erstellt eine Instanz der Standard-Antwort vom Server
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Classes.Responses.StdResponse.#ctor(System.Boolean,System.String)">
+            <summary>
+              Erstellt eine Instanz der Standard-Antwort vom Server
+            </summary>
+            <param name="success">Erfolgsindikator</param>
+            <param name="message">Mitteilung</param>
+        </member>
         <member name="T:APIPacBomb.Classes.Util">
             <summary>
               Helferklasse
@@ -61,6 +173,79 @@
             </summary>
             <param name="user">Anzumeldender Nutzer</param>
             <returns>JWT</returns>
+        </member>
+        <member name="T:APIPacBomb.Controllers.UserController">
+            <summary>
+              Controllerklasse für Nutzerinteraktionen
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.#ctor(APIPacBomb.Interfaces.IUserDatabaseService,APIPacBomb.Interfaces.ISessionService,Microsoft.Extensions.Logging.ILogger{APIPacBomb.Controllers.UserController})">
+            <summary>
+             Erzeugt eine Instanz der Controllerklasse
+            </summary>
+            <param name="userDatabaseService">Nutzer-Datenbankservice</param>
+            <param name="sessionService">Sessionservice</param>
+            <param name="logger">Logginginstanz des Controllers</param>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.Get">
+            <summary>
+              Liefert den Nutzer des JWT zurück
+            </summary>
+            <returns>Angemeldeter Nutzer</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.GetAll">
+            <summary>
+              Liefert alle angemeldeten Nutzer zurück
+            </summary>
+            <returns>Liste der angemeldeten Nutzer</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.PostPlayRequest(System.Int32)">
+            <summary>
+              Sendet eine Spieleanfrage an den Nutzer mit der übergebenen Id
+            </summary>
+            <param name="id">UserId</param>
+            <returns>Standardresponse</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.GetPlayRequest">
+            <summary>
+              Liefert alle Anfragen, die an einen selbst gestellt wurden
+            </summary>        
+            <returns>Liste der Spieleanfragen</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.GetOutgoingPlayRequest">
+            <summary>
+              Liefert alle Anfragen, die man selbst gestellt hat
+            </summary>        
+            <returns>Liste der Spieleanfragen</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.PostAcceptPlayRequest(System.Int32)">
+            <summary>
+              Akzetiert eine Spieleanfrage des Nutzer mit der übergebenen UserId
+            </summary>
+            <param name="id">UserId des anfragenden Nutzers</param>
+            <returns>StdResponse</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.PostRejectPlayRequest(System.Int32)">
+            <summary>
+              Ablehnen einer Spieleanfrage des Nutzer mit der übergebenen UserId
+            </summary>
+            <param name="id">UserId des anfragenden Nutzers</param>
+            <returns>StdResponse</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.Get(System.Int32)">
+            <summary>
+              Liefert einen Nutzer anhand seiner Id
+              Achtung => Adminrechte notwendig
+            </summary>
+            <param name="id">UserId</param>
+            <returns>Nutzer</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.GetPicture(System.Int32)">
+            <summary>
+              Liefert das Nutzerbild eines Nutzers
+            </summary>
+            <param name="id">UserId</param>
+            <returns>BASE64-kodiertes Bild</returns>
         </member>
         <member name="P:APIPacBomb.Model.User.Id">
             <summary>
@@ -174,6 +359,118 @@
             </summary>
             <param name="cmdText">Kommando</param>
             <param name="param">Kommandoparameter</param>
+        </member>
+        <member name="T:APIPacBomb.Services.SessionService">
+            <summary>
+              Service für Handling der aktiv angemeldeten Nutzer
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.#ctor(Microsoft.Extensions.Logging.ILogger{APIPacBomb.Services.SessionService})">
+            <summary>
+              Erstellt eine Instanz der SessionService-Klasse
+            </summary>
+            <param name="logger">Logging-Instanz</param>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.Finalize">
+            <summary>
+              Destruktor
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.AddLoggedinUser(APIPacBomb.Model.User)">
+            <summary>
+              Fügt einen Nutzer in die Liste der aktiven Nutzer hinzu
+            </summary>
+            <param name="user">Angemeldeter Nutzer</param>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.RemoveLoggedinUser(APIPacBomb.Model.User)">
+            <summary>
+              Löscht einen Nutzer aus der Liste der angemeldeten Nutzer und löscht alle ein- und ausgehenden Spieleanfragen
+            </summary>
+            <param name="user">Angemeldeter Nutzer</param>
+            <returns>true, wenn Lösung erfolgreich war, sonst false</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.GetLoggedInUsers">
+            <summary>
+              Liefert die Liste der angemeldeten Nutzer
+            </summary>
+            <returns>Liste der angemeldeten Nutzer</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.SendPlayRequest(APIPacBomb.Model.User,System.Int32)">
+            <summary>
+              Sendet eine Spielanfrage an einen Nutzer
+            </summary>
+            <param name="user">Anfragender Nutzer</param>
+            <param name="requestedUserId">Angefragter Nutzer</param>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.GetPlayRequest(APIPacBomb.Model.User,System.Boolean)">
+            <summary>
+              Liefert eine Liste von Anfragen, die einem Nutzer gestellt wurden oder die dieser erhalten hat
+            </summary>
+            <param name="user">Nutzer für den die Liste erzeugt werden soll</param>
+            <param name="outgoing">false, wenn die eingegangen Anfragen ermittelt werden sollen. true, wenn die ausgehenden Anfragen ermittelt werden</param>
+            <returns>Liste der Anfragen</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.AcceptPlayRequest(APIPacBomb.Model.User,System.Int32)">
+            <summary>
+              Akzeptiert eine Spieleanfrage
+            </summary>
+            <param name="user">Akzeptierender Nutzer</param>
+            <param name="requestingUserId">UserId des anfragenden Nutzers</param>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.RejectPlayRequest(APIPacBomb.Model.User,System.Int32)">
+            <summary>
+              Lehnt eine Spieleanfrage ab
+            </summary>
+            <param name="user">Ablehender Nutzer</param>
+            <param name="requestingUserId">UserId des anfragenden Nutzers</param>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.GetUser(System.String)">
+            <summary>
+              Liefert den Nutzer anhand seines Nutzernamens zurück
+            </summary>
+            <param name="username">Nutzername</param>
+            <returns>Instanz der Userklasse</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.GetUser(System.Int32)">
+            <summary>
+              Liefert den Nutzer anhand seiner UserId
+            </summary>
+            <param name="userId">UserId</param>
+            <returns>Instanz der Userklsse</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService._GetIndexOf(APIPacBomb.Model.User)">
+            <summary>
+              Liefert den Index aus den LoggedInUsers
+            </summary>
+            <param name="user">Zu suchender Nutzer</param>
+            <returns>0-basierender Index, wenn nicht gefunden -1</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService._GetIndexOf(System.Int32)">
+            <summary>
+              Liefert den Index aus den LoggedInUsers
+            </summary>
+            <param name="userId">Zu suchende UserId</param>
+            <returns>0-basierender Index, wenn nicht gefunden -1</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService._GetIndexOfPlayingPair(APIPacBomb.Model.User,APIPacBomb.Model.User)">
+            <summary>
+              Liefert den Index aus den UserPlayingPairs
+            </summary>
+            <param name="requestingUser">Anfragender Nutzer</param>
+            <param name="requestedUser">Angefragter Nutzer</param>
+            <returns>0-basierender Index, wenn nicht gefunden -1</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService._SetStatus(System.Int32,APIPacBomb.Classes.UserPlayingPair.PlayingStatus)">
+            <summary>
+              Setzt den Status eines Spielerpaares
+            </summary>
+            <param name="index">Index für UserPlayingPairs</param>
+            <param name="status">Neuer Status</param>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService._ExpiryThreadHandle">
+            <summary>
+              Löscht alle Anfragen, die abgelehnt oder gestellt wurden und älter als 30 Sekunden sind
+            </summary>
         </member>
         <member name="M:APIPacBomb.Services.UserDatabaseService.#ctor(System.String,System.String,System.String,System.String)">
             <summary>

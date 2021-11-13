@@ -92,7 +92,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{    \r\n    \"username\": \"frantic\",\r\n    \"password\": \"klaus\"    \r\n}",
+					"raw": "{    \r\n    \"username\": \"dirk\",\r\n    \"password\": \"1234\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -237,6 +237,82 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "PostPlayRequest",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/User/PlayRequest/19",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"User",
+						"PlayRequest",
+						"19"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostAcceptPlayRequest",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/User/AcceptPlayRequest/19",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"User",
+						"AcceptPlayRequest",
+						"19"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPlayRequestIncoming",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/User/PlayRequest/Incoming",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"User",
+						"PlayRequest",
+						"Incoming"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPlayRequestOutgoing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/User/PlayRequest/Incoming",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"User",
+						"PlayRequest",
+						"Incoming"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -244,7 +320,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmFtZSI6ImRpcmsiLCJleHAiOjE2MzY1ODk2NTgsImlzcyI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiIsImF1ZCI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiJ9.JpDclLEpYPlNVKY_vvKRMdOkkjiiWjZrnKQXbZ-S4O4",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmFtZSI6ImRpcmsiLCJleHAiOjE2MzY3Njg3ODQsImlzcyI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiIsImF1ZCI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiJ9.fMviH2xFcqaceRJj3hOSf3UnwpUSO0PucmJh_XxmuAY",
 				"type": "string"
 			}
 		]
@@ -272,12 +348,12 @@
 	"variable": [
 		{
 			"key": "url",
-			"value": "http://localhost:61339/api",
-			"disabled": true
+			"value": "http://localhost:61339/api"
 		},
 		{
 			"key": "url",
-			"value": "http://dirkdrutschmann.de:61338/api"
+			"value": "http://dirkdrutschmann.de:61338/api",
+			"disabled": true
 		}
 	]
 }

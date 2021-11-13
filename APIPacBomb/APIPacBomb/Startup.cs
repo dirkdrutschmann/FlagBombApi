@@ -64,7 +64,7 @@ namespace APIPacBomb
                 {
                     Version = "1.0",
                     Title = "PacBomb API",
-                    Description = "API für PacBomb-Steuerung"
+                    Description = "API fuer FlagBomb-Steuerung"
                 });
                 
                 var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
