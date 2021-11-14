@@ -4,26 +4,59 @@ using System.Collections.Generic;
 
 namespace APIPacBomb.Model.Map
 {
+    /// <summary>
+    ///   Klasse zum Darstellen einer Karte
+    /// </summary>
     public class Grid
     {
+        /// <summary>
+        ///   Breite
+        /// </summary>
         [JsonProperty("width")]
         public int Width { get; set; }
 
+        /// <summary>
+        ///   Höhe
+        /// </summary>
         [JsonProperty("height")]
         public int Heigth { get; set; }
 
+        /// <summary>
+        ///   Spalten mit Zeilen
+        /// </summary>
         [JsonProperty("columns")]
         public List<List<Tile>> Columns { get; private set; }
 
+        /// <summary>
+        ///   Anzahl der Spalten
+        /// </summary>
         [JsonProperty("columnCount")]
         public int ColumnCount { get; set; }
 
+        /// <summary>
+        ///   Anzahl der Zeilen
+        /// </summary>
         [JsonProperty("rowCount")]
         public int RowCount { get; set; }
 
+        /// <summary>
+        ///   Größe der Quadrate in Pixel
+        /// </summary>
         [JsonProperty("squareFactor")]
         public int SquareFactor { get; set; }
 
+        /// <summary>
+        ///   Wurde die Map bereits einmal während der Lifetime generiert
+        /// </summary>
+        [JsonIgnore]
+        public bool IsGeneratedOnce { get; private set; }
+
+        /// <summary>
+        ///   Erstellt eine Instanz der Grid-Klasse
+        /// </summary>
+        /// <param name="width">Breite</param>
+        /// <param name="height">Höhe</param>
+        /// <param name="squareFactor">Größe der Quadrate in Pixel</param>
         public Grid(int width, int height, int squareFactor)
         {
             Width = width;
@@ -33,8 +66,12 @@ namespace APIPacBomb.Model.Map
             SquareFactor = squareFactor;
 
             Columns = new List<List<Tile>>();
+            IsGeneratedOnce = false;
         }
 
+        /// <summary>
+        ///   Generiert die Map
+        /// </summary>
         public void GenerateMap()
         {
             List<Tile> row;
@@ -122,6 +159,17 @@ namespace APIPacBomb.Model.Map
 
                 Columns.Add(row);
             }
+
+            IsGeneratedOnce = true;
+        }
+
+        /// <summary>
+        ///   Wandelt die Instanz der Klasse in einen JSON-String
+        /// </summary>
+        /// <returns>JSON-String der Instanz der Klasse</returns>
+        public string ToJsonString()
+        {
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

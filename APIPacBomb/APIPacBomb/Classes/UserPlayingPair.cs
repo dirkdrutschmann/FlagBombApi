@@ -53,6 +53,11 @@ namespace APIPacBomb.Classes
         [JsonIgnore]
         public string RequestingIP { get; set; }
 
+        /// <summary>
+        ///   Spielmap des Paares
+        /// </summary>
+        [JsonProperty("map")]
+        public Model.Map.Grid Map { get; set; }
 
         /// <summary>
         ///   Erstellt eine Instanz der UserPlayingPairs-Klasse

@@ -118,7 +118,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": 13,\r\n    \"username\": \"frantic\",\r\n    \"email\": \"frantic88@gmx.de\",\r\n    \"password\": null,\r\n    \"secret\": null,\r\n    \"prename\": \"Manuel\",\r\n    \"lastname\": \"Kumpf\",\r\n    \"lastLogon\": \"2021-11-10T19:59:22\",\r\n    \"registrationOn\": \"2021-10-19T11:44:29\",\r\n    \"isAdmin\": false\r\n}",
+					"raw": "{\r\n    \"id\": 19,\r\n    \"username\": \"dirk\",\r\n    \"email\": \"mail@dirkdrutschmann.de\",\r\n    \"password\": null,\r\n    \"secret\": null,\r\n    \"prename\": \"Dirk\",\r\n    \"lastname\": \"Drutschmann\",\r\n    \"lastLogon\": \"2021-11-10T21:39:37\",\r\n    \"registrationOn\": \"2021-10-29T18:07:17\",\r\n    \"isAdmin\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -243,15 +243,24 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"width\": 1000,\r\n  \"height\": 1000,\r\n  \"squareFactor\": 30\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{url}}/User/PlayRequest/19",
+					"raw": "{{url}}/User/PlayRequest/13",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"User",
 						"PlayRequest",
-						"19"
+						"13"
 					]
 				}
 			},
@@ -263,14 +272,33 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/User/AcceptPlayRequest/19",
+					"raw": "{{url}}/User/AcceptPlayRequest/13",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"User",
 						"AcceptPlayRequest",
-						"19"
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostRejectPlayRequest",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/User/RejectPlayRequest/13",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"User",
+						"RejectPlayRequest",
+						"13"
 					]
 				}
 			},
@@ -301,14 +329,52 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/User/PlayRequest/Incoming",
+					"raw": "{{url}}/User/PlayRequest/Outgoing",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"User",
 						"PlayRequest",
-						"Incoming"
+						"Outgoing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetIsPartnerConnected",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/Game/isPartnerConnected/accb90d5-543f-4b68-af54-57c7e56f68f8",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"Game",
+						"isPartnerConnected",
+						"accb90d5-543f-4b68-af54-57c7e56f68f8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SetGameOver",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/Game/setGameOver/accb90d5-543f-4b68-af54-57c7e56f68f8",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"Game",
+						"setGameOver",
+						"accb90d5-543f-4b68-af54-57c7e56f68f8"
 					]
 				}
 			},
@@ -320,7 +386,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmFtZSI6ImRpcmsiLCJleHAiOjE2MzY3Njg3ODQsImlzcyI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiIsImF1ZCI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiJ9.fMviH2xFcqaceRJj3hOSf3UnwpUSO0PucmJh_XxmuAY",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmFtZSI6ImRpcmsiLCJleHAiOjE2MzY5MzU2MjcsImlzcyI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiIsImF1ZCI6IkI4MjY5MTIxLTg1NTctNEQ3RS1CNEY4LTdGNzY2MzgyRThCQiJ9.8f2ghTRGhgTk4nb5pKSXzBBZ02JbRf1BL2RdLe0IXac",
 				"type": "string"
 			}
 		]

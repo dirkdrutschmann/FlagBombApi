@@ -1,18 +1,21 @@
 ﻿using APIPacBomb.Model;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 
 namespace APIPacBomb.Interfaces
 {
     public interface ISessionService
     {
+        public event EventHandler<Classes.UserPlayingPair> AllPartnersConnected;
+
         void AddLoggedinUser(User user);
-        
+
         bool RemoveLoggedinUser(User user);
-        
+
         List<User> GetLoggedInUsers();
 
-        void SendPlayRequest(User user, int requestedUserId, HttpContext context);
+        void SendPlayRequest(User user, int requestedUserId, Model.Map.Grid mapConfig, HttpContext context);
 
         List<Classes.UserPlayingPair> GetPlayRequest(User user, bool outgoing = false);
 
@@ -29,5 +32,7 @@ namespace APIPacBomb.Interfaces
         System.Net.WebSockets.WebSocket GetPartnerWebSocket(string playingPairId, int userId);
 
         Classes.UserPlayingPair GetUserPlayingPair(string playingPairId);
+
+        void UpdatePlayingPair(Classes.UserPlayingPair pair);
     }
 }

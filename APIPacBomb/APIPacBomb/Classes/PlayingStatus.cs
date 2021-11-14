@@ -36,7 +36,12 @@ namespace APIPacBomb.Classes
             /// <summary>
             ///   Im Spiel
             /// </summary>
-            IN_GAME
+            IN_GAME,
+
+            /// <summary>
+            ///   Spiel vorbei
+            /// </summary>
+            GAME_OVER
         }
     }
 }

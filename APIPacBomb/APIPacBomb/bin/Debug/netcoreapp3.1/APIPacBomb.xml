@@ -57,6 +57,11 @@
               Im Spiel
             </summary>
         </member>
+        <member name="F:APIPacBomb.Classes.UserPlayingPair.PlayingStatus.GAME_OVER">
+            <summary>
+              Spiel vorbei
+            </summary>
+        </member>
         <member name="P:APIPacBomb.Classes.UserPlayingPair.Id">
             <summary>
               Eindeutige Id des Spielerpaares
@@ -90,6 +95,11 @@
         <member name="P:APIPacBomb.Classes.UserPlayingPair.RequestingIP">
             <summary>
               IP-Adresse an die die Anfrage geht
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.UserPlayingPair.Map">
+            <summary>
+              Spielmap des Paares
             </summary>
         </member>
         <member name="M:APIPacBomb.Classes.UserPlayingPair.#ctor">
@@ -131,6 +141,27 @@
             <param name="success">Erfolgsindikator</param>
             <param name="message">Mitteilung</param>
         </member>
+        <member name="T:APIPacBomb.Classes.Responses.WebSocketObjectResponse">
+            <summary>
+              Klasse für Nachrichtenfluss über WebSocket
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Responses.WebSocketObjectResponse.Class">
+            <summary>
+              Name der Klasse des Objektes
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Responses.WebSocketObjectResponse.ObjectValue">
+            <summary>
+              Instanz der Klasse
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Classes.Responses.WebSocketObjectResponse.ToJsonString">
+            <summary>
+              Liefert die Instanz der Klasse als JSON-String zurück
+            </summary>
+            <returns>JSON-String der Instanz der Klasse</returns>
+        </member>
         <member name="T:APIPacBomb.Classes.Util">
             <summary>
               Helferklasse
@@ -155,7 +186,12 @@
             <param name="context">HTTP-Kontext</param>
             <returns>Nutzername, wenn Claim im JWT gesetzt, sonst <code>string.Empty</code></returns>
         </member>
-        <member name="M:APIPacBomb.Controllers.GameController.#ctor(APIPacBomb.Interfaces.ISessionService)">
+        <member name="T:APIPacBomb.Controllers.GameController">
+            <summary>
+              Controller für Spielrequests
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Controllers.GameController.#ctor(APIPacBomb.Interfaces.ISessionService,Microsoft.Extensions.Logging.ILogger{APIPacBomb.Controllers.GameController})">
             <summary>
               Erstellt eine Instanz der Game-Controller-Klasse
             </summary>
@@ -171,6 +207,13 @@
         <member name="M:APIPacBomb.Controllers.GameController.IsPartnerConnected(System.String)">
             <summary>
               Prüft, ob der Spielpartner die WebSocket-Verbindung aufgebaut hat
+            </summary>
+            <param name="playingPairId">Spielerpaar-Id</param>
+            <returns>StdResponse</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.GameController.SetGameOver(System.String)">
+            <summary>
+              Zeigt das Ende des Spieles an
             </summary>
             <param name="playingPairId">Spielerpaar-Id</param>
             <returns>StdResponse</returns>
@@ -242,11 +285,12 @@
             </summary>
             <returns>Liste der angemeldeten Nutzer</returns>
         </member>
-        <member name="M:APIPacBomb.Controllers.UserController.PostPlayRequest(System.Int32)">
+        <member name="M:APIPacBomb.Controllers.UserController.PostPlayRequest(System.Int32,APIPacBomb.Classes.Requests.MapRequest)">
             <summary>
               Sendet eine Spieleanfrage an den Nutzer mit der übergebenen Id
             </summary>
             <param name="id">UserId</param>
+            <param name="mapConfig">Kartenkonfiguration</param>
             <returns>Standardresponse</returns>
         </member>
         <member name="M:APIPacBomb.Controllers.UserController.GetIncomingPlayRequest">
@@ -289,6 +333,65 @@
             </summary>
             <param name="id">UserId</param>
             <returns>BASE64-kodiertes Bild</returns>
+        </member>
+        <member name="T:APIPacBomb.Model.Map.Grid">
+            <summary>
+              Klasse zum Darstellen einer Karte
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Grid.Width">
+            <summary>
+              Breite
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Grid.Heigth">
+            <summary>
+              Höhe
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Grid.Columns">
+            <summary>
+              Spalten mit Zeilen
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Grid.ColumnCount">
+            <summary>
+              Anzahl der Spalten
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Grid.RowCount">
+            <summary>
+              Anzahl der Zeilen
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Grid.SquareFactor">
+            <summary>
+              Größe der Quadrate in Pixel
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Grid.IsGeneratedOnce">
+            <summary>
+              Wurde die Map bereits einmal während der Lifetime generiert
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Grid.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+              Erstellt eine Instanz der Grid-Klasse
+            </summary>
+            <param name="width">Breite</param>
+            <param name="height">Höhe</param>
+            <param name="squareFactor">Größe der Quadrate in Pixel</param>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Grid.GenerateMap">
+            <summary>
+              Generiert die Map
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Grid.ToJsonString">
+            <summary>
+              Wandelt die Instanz der Klasse in einen JSON-String
+            </summary>
+            <returns>JSON-String der Instanz der Klasse</returns>
         </member>
         <member name="T:APIPacBomb.Model.Map.Type">
             <summary>
@@ -433,6 +536,11 @@
               Service für Handling der aktiv angemeldeten Nutzer
             </summary>
         </member>
+        <member name="E:APIPacBomb.Services.SessionService.AllPartnersConnected">
+            <summary>
+              Wird ausgelöst, wenn alle Spielpartner verbunden sind
+            </summary>
+        </member>
         <member name="M:APIPacBomb.Services.SessionService.#ctor(Microsoft.Extensions.Logging.ILogger{APIPacBomb.Services.SessionService})">
             <summary>
               Erstellt eine Instanz der SessionService-Klasse
@@ -463,7 +571,7 @@
             </summary>
             <returns>Liste der angemeldeten Nutzer</returns>
         </member>
-        <member name="M:APIPacBomb.Services.SessionService.SendPlayRequest(APIPacBomb.Model.User,System.Int32,Microsoft.AspNetCore.Http.HttpContext)">
+        <member name="M:APIPacBomb.Services.SessionService.SendPlayRequest(APIPacBomb.Model.User,System.Int32,APIPacBomb.Model.Map.Grid,Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
               Sendet eine Spielanfrage an einen Nutzer
             </summary>
@@ -530,6 +638,12 @@
             </summary>
             <param name="playingPairId">Id des Spielerpaars</param>
             <returns>Spielerpaarung</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.UpdatePlayingPair(APIPacBomb.Classes.UserPlayingPair)">
+            <summary>
+              Aktualisiert eine Spielpaarung
+            </summary>
+            <param name="pair">Instanz der Spielpaarung</param>
         </member>
         <member name="M:APIPacBomb.Services.SessionService._GetIndexOf(APIPacBomb.Model.User)">
             <summary>

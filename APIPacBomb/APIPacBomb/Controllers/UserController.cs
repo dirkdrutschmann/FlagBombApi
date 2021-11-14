@@ -59,10 +59,11 @@ namespace APIPacBomb.Controllers
         ///   Sendet eine Spieleanfrage an den Nutzer mit der übergebenen Id
         /// </summary>
         /// <param name="id">UserId</param>
+        /// <param name="mapConfig">Kartenkonfiguration</param>
         /// <returns>Standardresponse</returns>
         [Authorize]
         [HttpPost("PlayRequest/{id}")]
-        public IActionResult PostPlayRequest(int id)
+        public IActionResult PostPlayRequest(int id, [FromBody]Classes.Requests.MapRequest mapConfig)
         {
             Model.User user = _sessionService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext));
 
@@ -79,7 +80,7 @@ namespace APIPacBomb.Controllers
 
             try
             {
-                _sessionService.SendPlayRequest(user, id, HttpContext);
+                _sessionService.SendPlayRequest(user, id, new Model.Map.Grid(mapConfig.Width, mapConfig.Height, mapConfig.SquareFactor), HttpContext);
 
                 response.Success = true;
                 response.Message = string.Format("Spieleanfrage erfolgreich an {0} gesendet.", _sessionService.GetUser(id).Username);

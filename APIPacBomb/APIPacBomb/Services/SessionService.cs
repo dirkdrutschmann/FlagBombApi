@@ -23,6 +23,11 @@ namespace APIPacBomb.Services
         private System.Threading.Thread _ExpiryThread;
 
         /// <summary>
+        ///   Wird ausgelöst, wenn alle Spielpartner verbunden sind
+        /// </summary>
+        public event EventHandler<UserPlayingPair> AllPartnersConnected;
+
+        /// <summary>
         ///   Erstellt eine Instanz der SessionService-Klasse
         /// </summary>
         /// <param name="logger">Logging-Instanz</param>
@@ -105,7 +110,7 @@ namespace APIPacBomb.Services
         /// <param name="user">Anfragender Nutzer</param>
         /// <param name="requestedUserId">Angefragter Nutzer</param>
         /// <param name="context">HTTP-Context der Anfrage</param>
-        public void SendPlayRequest(Model.User user, int requestedUserId, Microsoft.AspNetCore.Http.HttpContext context)
+        public void SendPlayRequest(Model.User user, int requestedUserId, Model.Map.Grid mapConfig, HttpContext context)
         {
             // Check if requesting User is logged in
             if (_GetIndexOf(user) < 0)
@@ -130,7 +135,8 @@ namespace APIPacBomb.Services
             _userPlayingPairs.Add(
                 new UserPlayingPair(user, _LoggedinUsers[indexOfRequestedUser])
                 {
-                    RequestedIP = context.Connection.RemoteIpAddress.MapToIPv4().ToString()
+                    RequestedIP = context.Connection.RemoteIpAddress.MapToIPv4().ToString(),
+                    Map = mapConfig
                 }
             );
 
@@ -236,13 +242,23 @@ namespace APIPacBomb.Services
                 throw new Classes.Exceptions.PlayingPairNotFoundException("Spielpaarung nicht gefunden");
             }
 
-            if (_userPlayingPairs[i].RequestedUser.Id == userId)
+            if (_userPlayingPairs[i].RequestedUser.Id == userId && (_userPlayingPairs[i].RequestedUser.WebSocket == null || _userPlayingPairs[i].RequestedUser.WebSocket.State != WebSocketState.Open))
             {
                 _userPlayingPairs[i].RequestedUser.WebSocket = socket;
+
+                if (_userPlayingPairs[i].RequestingUser.WebSocket != null &&_userPlayingPairs[i].RequestingUser.WebSocket.State == WebSocketState.Open)
+                {
+                    AllPartnersConnected?.Invoke(this, _userPlayingPairs[i]);
+                }
             }
-            else if (_userPlayingPairs[i].RequestingUser.Id == userId)
+            else if (_userPlayingPairs[i].RequestingUser.Id == userId && (_userPlayingPairs[i].RequestingUser.WebSocket == null || _userPlayingPairs[i].RequestingUser.WebSocket.State != WebSocketState.Open))
             {
                 _userPlayingPairs[i].RequestingUser.WebSocket = socket;
+
+                if (_userPlayingPairs[i].RequestedUser.WebSocket != null &&_userPlayingPairs[i].RequestedUser.WebSocket.State == WebSocketState.Open)
+                {
+                    AllPartnersConnected?.Invoke(this, _userPlayingPairs[i]);
+                }
             }
         }
 
@@ -286,6 +302,22 @@ namespace APIPacBomb.Services
             }
 
             return _userPlayingPairs[i];
+        }
+
+        /// <summary>
+        ///   Aktualisiert eine Spielpaarung
+        /// </summary>
+        /// <param name="pair">Instanz der Spielpaarung</param>
+        public void UpdatePlayingPair(UserPlayingPair pair)
+        {
+            int i = _GetIndexOfPlayingPair(pair.Id.ToString());
+
+            if (i < 0)
+            {
+                throw new Classes.Exceptions.PlayingPairNotFoundException(string.Format("Spielpaarung {0} nicht gefunden.", pair.Id.ToString()));
+            }
+
+            _userPlayingPairs[i] = pair;
         }
 
         /// <summary>
@@ -361,7 +393,7 @@ namespace APIPacBomb.Services
         /// <summary>
         ///   Löscht alle Anfragen, die abgelehnt oder gestellt wurden und älter als 30 Sekunden sind
         /// </summary>
-        private void _ExpiryThreadHandle()
+        private async void _ExpiryThreadHandle()
         {
             UserPlayingPair pair;
 
@@ -371,15 +403,32 @@ namespace APIPacBomb.Services
                 {
                     pair = _userPlayingPairs[i];
 
-                    if (pair.Status == UserPlayingPair.PlayingStatus.ACCEPTED || pair.Status == UserPlayingPair.PlayingStatus.IN_GAME)
+                    if (pair.Status == UserPlayingPair.PlayingStatus.IN_GAME)
                     {
                         continue;
                     }
 
-                    if ((DateTime.Now - pair.RequestTime).TotalSeconds < 600)
+                    if ((DateTime.Now - pair.RequestTime).TotalSeconds < 120 && pair.Status != UserPlayingPair.PlayingStatus.GAME_OVER)
                     {
                         continue;
                     }
+
+                    if (_userPlayingPairs[i].RequestedUser.WebSocket != null && !_userPlayingPairs[i].RequestedUser.WebSocket.CloseStatus.HasValue)
+                    {
+                        await _userPlayingPairs[i].RequestedUser.WebSocket?.CloseAsync(WebSocketCloseStatus.NormalClosure, "Expired", System.Threading.CancellationToken.None);
+                    }                    
+                    
+                    _userPlayingPairs[i].RequestedUser.WebSocket?.Dispose();
+                    _userPlayingPairs[i].RequestedUser.WebSocket = null;
+
+                    if (_userPlayingPairs[i].RequestingUser.WebSocket != null && !_userPlayingPairs[i].RequestingUser.WebSocket.CloseStatus.HasValue)
+                    {
+                        await _userPlayingPairs[i].RequestingUser.WebSocket?.CloseAsync(WebSocketCloseStatus.NormalClosure, "Expired", System.Threading.CancellationToken.None);
+                    }                    
+
+                    _userPlayingPairs[i].RequestingUser.WebSocket?.Dispose();
+                    _userPlayingPairs[i].RequestingUser.WebSocket = null;
+
 
                     _userPlayingPairs.RemoveAt(i);
 
