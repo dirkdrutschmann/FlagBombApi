@@ -44,6 +44,38 @@ namespace APIPacBomb.Controllers
         }
 
         /// <summary>
+        ///   Prüft, ob der Spielpartner die WebSocket-Verbindung aufgebaut hat
+        /// </summary>
+        /// <param name="playingPairId">Spielerpaar-Id</param>
+        /// <returns>StdResponse</returns>
+        [Authorize]
+        [HttpGet("isPartnerConnected/{playingPairId}")]
+        public IActionResult IsPartnerConnected(string playingPairId)
+        {
+            Classes.UserPlayingPair pair = _SessionService.GetUserPlayingPair(playingPairId);
+            Model.User user = _SessionService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext));
+
+            Classes.Responses.StdResponse response = new Classes.Responses.StdResponse();
+
+            if 
+            (
+                (pair.RequestedUser.Id == user.Id && pair.RequestingUser.WebSocket != null && pair.RequestingUser.WebSocket.State != WebSocketState.Closed) ||
+                (pair.RequestingUser.Id == user.Id && pair.RequestedUser.WebSocket != null && pair.RequestedUser.WebSocket.State != WebSocketState.Closed)
+            )
+            {
+                response.Success = true;
+                response.Message = "Spielpartner hat die Verbindung gestartet.";
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Spielpartner ist nicht verbunden.";
+            }
+
+            return Ok(response);
+        }
+
+        /// <summary>
         ///   Initialisiert den WebSocket
         /// </summary>
         /// <param name="playingPairId">Spielerpaar-Id</param>

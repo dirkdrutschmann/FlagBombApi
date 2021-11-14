@@ -168,6 +168,13 @@
             <param name="mapSettings">Map-Settings</param>
             <returns>Map-Grid</returns>
         </member>
+        <member name="M:APIPacBomb.Controllers.GameController.IsPartnerConnected(System.String)">
+            <summary>
+              Prüft, ob der Spielpartner die WebSocket-Verbindung aufgebaut hat
+            </summary>
+            <param name="playingPairId">Spielerpaar-Id</param>
+            <returns>StdResponse</returns>
+        </member>
         <member name="M:APIPacBomb.Controllers.GameController.Get(System.String,System.Int32)">
             <summary>
               Initialisiert den WebSocket
