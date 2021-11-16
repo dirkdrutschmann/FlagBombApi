@@ -88,7 +88,14 @@ namespace APIPacBomb.Services
 
             _ExecuteNonQuery(cmd, paras);
 
-            return GetUser(user.Username);
+            User newUser = GetUser(user.Username);
+
+            if (!string.IsNullOrEmpty(user.UserImageBase64))
+            {
+                SetUserPricture(newUser.Id, user.UserImageBase64);
+            }
+
+            return newUser;
         }
 
         public User GetUser(int id)
@@ -172,6 +179,33 @@ namespace APIPacBomb.Services
             }
 
             return pictureBase64;
+
+        }
+
+        /// <summary>
+        ///   Setzt das Nutzerbild
+        /// </summary>
+        /// <param name="id">Id des Nutzers</param>
+        /// <param name="pictureBase64">Bild Base64-kodiert</param>
+        public void SetUserPricture(int id, string pictureBase64)
+        {
+            byte[] picture = Convert.FromBase64String(pictureBase64);            
+
+            string cmd = "update pb_users " +
+                         "set    picture = @pic " +
+                         "where  id = @id";
+
+            _SetConnection();
+
+            _dbCommand.CommandText = cmd;
+            _dbCommand.Parameters.Clear();
+            _dbCommand.Parameters.AddWithValue("@pic", picture);
+            _dbCommand.Parameters.AddWithValue("@id", id);
+
+            _dbCommand.Prepare();
+
+            _dbCommand.ExecuteNonQuery();
+
 
         }
 

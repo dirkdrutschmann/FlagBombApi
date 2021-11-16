@@ -76,6 +76,12 @@ namespace APIPacBomb.Model
         public bool IsAdmin { get; set; }
 
         /// <summary>
+        ///   Base64-kodierter String des Nuzterbildes
+        /// </summary>
+        [JsonProperty("userImageBase64")]
+        public string UserImageBase64 { get; set; }
+
+        /// <summary>
         ///   WebSocket-Instanz
         /// </summary>
         [JsonIgnore]
