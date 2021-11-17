@@ -9,18 +9,29 @@ using System.Threading.Tasks;
 
 namespace APIPacBomb.Controllers
 {
+    /// <summary>
+    ///   Controller zur Steuerung der Registrierung eines Nutzers
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class RegisterController : ControllerBase
     {
         private Interfaces.IUserDatabaseService _userDatabaseService;
 
+        /// <summary>
+        ///   Erzeugt eine Instanz des Registrierungscontrollers
+        /// </summary>
+        /// <param name="userDatabaseService">Datenbankservice</param>
         public RegisterController(Interfaces.IUserDatabaseService userDatabaseService)
         {
             _userDatabaseService = userDatabaseService;
         }
 
-        // GET api/<RegisterController>/mail/5
+        /// <summary>
+        ///   Prüft, ob eine E-Mailadresse bereits vorhanden ist
+        /// </summary>
+        /// <param name="mail">Mailadresse</param>
+        /// <returns>true, wenn E-Mailadresse bereits im System hinterlegt ist, sonst false</returns>
         [AllowAnonymous]
         [HttpGet("mail/{mail}")]        
         public IActionResult GetMail(string mail)
@@ -28,7 +39,11 @@ namespace APIPacBomb.Controllers
             return Ok(_userDatabaseService.ExistsMail(mail));
         }
 
-        // GET api/<RegisterController>/user/frantic
+        /// <summary>
+        ///   Prüft, ob ein Nutzername bereits im System hinterlegt ist
+        /// </summary>
+        /// <param name="username">Nutzername</param>
+        /// <returns>true, wenn Nutzername bereits vorahnden ist, sonst false</returns>
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public IActionResult Get(string username)
@@ -36,7 +51,11 @@ namespace APIPacBomb.Controllers
             return Ok(_userDatabaseService.ExistsUsername(username));
         }
 
-        // POST api/<RegisterController>
+        /// <summary>
+        ///   Registriert einen Nutzers
+        /// </summary>
+        /// <param name="user">Nutzerinformationen</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Post([FromBody] Model.User user)

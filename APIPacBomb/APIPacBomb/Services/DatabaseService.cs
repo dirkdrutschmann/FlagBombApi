@@ -20,7 +20,7 @@ namespace APIPacBomb.Services
         /// <summary>
         ///   Datenbankcommand
         /// </summary>
-        private MySqlCommand _dbCommand;
+        protected MySqlCommand _dbCommand;
 
         /// <summary>
         ///   Verbindungszeichenkette
