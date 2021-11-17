@@ -208,6 +208,7 @@ namespace APIPacBomb.Controllers
             if (!pair.Map.IsGeneratedOnce)
             {
                 pair.Status = Classes.UserPlayingPair.PlayingStatus.IN_GAME;
+                pair.Map.PlayingPairId = pair.Id;
                 pair.Map.GenerateMap();
 
                 _SessionService.UpdatePlayingPair(pair);
@@ -221,14 +222,98 @@ namespace APIPacBomb.Controllers
                     ObjectValue = pair.Map
                 }.ToJsonString();                    
 
-                // Eine Sekunde warten, dass alle Partner ihren Handler initialisiert haben
-                Thread.Sleep(1000);
+                // Warten, dass alle Partner ihren Handler initialisiert haben
+                Thread.Sleep(500);
 
-                await pair.RequestedUser.WebSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(mapJson, 0, mapJson.Length)), WebSocketMessageType.Text, true, CancellationToken.None);
-                await pair.RequestingUser.WebSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(mapJson, 0, mapJson.Length)), WebSocketMessageType.Text, true, CancellationToken.None);
+                await _SessionService.SendMessageToAllPlayers(pair.Id.ToString(), mapJson);
 
                 _Logger.LogInformation(string.Format("Spielkarte an alle Spieler der Paarung {0} gesendet.", pair.Id.ToString()));
+
+                // Auf Verarbeitung der letzten Information warten
+                Thread.Sleep(500);
+
+                _Logger.LogInformation(string.Format("Spielermodels fuer Spielerpaarung {0} wird erzeugt.", pair.Id.ToString()));
+
+                pair.RequestedUser.Bomberman = new Model.Map.Bomberman()
+                {
+                    UserId = pair.RequestedUser.Id,
+                    X = 0,
+                    Y = pair.Map.SquareFactor,
+                    Width = pair.Map.SquareFactor,
+                    Size = pair.Map.SquareFactor,
+                    OwnedFlag = new Model.Map.Flag()
+                    {
+                        X = pair.Map.Columns[(pair.Map.ColumnCount / 2) + 1][1].DownLeft.X,
+                        Y = pair.Map.Columns[(pair.Map.ColumnCount / 2) + 1][1].DownLeft.Y,
+                        Size = pair.Map.SquareFactor,
+                        Color = Model.Map.PlayerColor.BLUE
+                    }
+                };
+
+                pair.RequestingUser.Bomberman = new Model.Map.Bomberman()
+                {
+                    UserId = pair.RequestingUser.Id,
+                    X = pair.Map.Columns[(pair.Map.ColumnCount - 1)][pair.Map.RowCount - 1].DownLeft.X,
+                    Y = pair.Map.Columns[(pair.Map.ColumnCount - 1)][pair.Map.RowCount - 1].DownLeft.Y,
+                    Width = pair.Map.SquareFactor,
+                    Size = pair.Map.SquareFactor,
+                    OwnedFlag = new Model.Map.Flag()
+                    {
+                        X = pair.Map.Columns[(pair.Map.ColumnCount / 2) + 1][pair.Map.RowCount - 3].DownLeft.X,
+                        Y = pair.Map.Columns[(pair.Map.ColumnCount / 2) + 1][pair.Map.RowCount - 3].DownLeft.Y,
+                        Size = pair.Map.SquareFactor,
+                        Color = Model.Map.PlayerColor.RED
+                    }
+                };
+
+                _SessionService.UpdatePlayingPair(pair);
+
+                string bomberManJson = new Classes.Responses.WebSocketObjectResponse()
+                {
+                    Class = pair.RequestedUser.Bomberman.GetType().Name,
+                    ObjectValue = pair.RequestedUser.Bomberman
+                }.ToJsonString();
+
+                // An Spieler senden
+                await _SessionService.SendMessageToAllPlayers(pair.Id.ToString(), bomberManJson);
+
+                bomberManJson = new Classes.Responses.WebSocketObjectResponse()
+                {
+                    Class = pair.RequestingUser.Bomberman.GetType().Name,
+                    ObjectValue = pair.RequestingUser.Bomberman
+                }.ToJsonString();
+
+                await _SessionService.SendMessageToAllPlayers(pair.Id.ToString(), bomberManJson);
+
+
+                _Logger.LogInformation(string.Format("Spielermodels fuer Spielerpaarung {0} an alle Teilnehmer gesendet.", pair.Id.ToString()));
+
+                // Eventlistener für Itemgenerierung zuweisen und Generierungporzess starten
+                pair.Map.ItemGenerated += _OnRandomGemGenerated;
+                pair.Map.StartRandomGeneration(1500);
+
+                _SessionService.UpdatePlayingPair(pair);
             }
+        }
+
+        /// <summary>
+        ///   Wird ausgelöst, wenn ein zufällig generiertes Item auf dem Grid abgelegt wird
+        /// </summary>
+        /// <param name="sender">Objekt, das das Event ausgelöst hat</param>
+        /// <param name="args">Eventargumente</param>
+        private void _OnRandomGemGenerated(object sender, Classes.ItemGeneratedEventArgs args)
+        {
+            _Logger.LogInformation(string.Format("Neues Item für Spielerpaar {0} generiert.", args.Grid.PlayingPairId.ToString()));
+
+            string gemJson = new Classes.Responses.WebSocketObjectResponse()
+            {
+                Class = args.NewGem.GetType().Name,
+                ObjectValue = args.NewGem
+            }.ToJsonString();
+
+            _SessionService.SendMessageToAllPlayers(args.Grid.PlayingPairId.ToString(), gemJson);
+
+            _Logger.LogInformation(string.Format("Item an Spielerpaar {0} gesendet.", args.Grid.PlayingPairId.ToString()));
         }
     }
 }

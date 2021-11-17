@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace APIPacBomb.Services
 {
+    /// <summary>
+    ///   Datenbank-Service
+    /// </summary>
     public class DatabaseService
     {
         /// <summary>
@@ -66,7 +69,8 @@ namespace APIPacBomb.Services
             {
                 _dbCommand.CommandText = "select 1 from dual";
                 _dbCommand.Connection = _dbConnection;
-                _dbCommand.ExecuteScalar();
+                
+                _dbCommand.ExecuteScalar();                
             }
             catch
             {
@@ -98,7 +102,6 @@ namespace APIPacBomb.Services
         /// <returns>Result-Set</returns>
         protected IEnumerable<IDataRecord> _ExecuteQuery(string query, List<KeyValuePair<string, string>> param)
         {
-            
             _SetConnection();
             _dbCommand.CommandText = query;
             _dbCommand.Parameters.Clear();
@@ -111,17 +114,15 @@ namespace APIPacBomb.Services
                 }
 
                 _dbCommand.Prepare();
-            }
-
+            }            
 
             using (MySqlDataReader reader = _dbCommand.ExecuteReader())
-            {
+            {                
                 while (reader.Read())
                 {
                     yield return reader;
                 }
             }
-
         }
 
         /// <summary>
@@ -131,7 +132,6 @@ namespace APIPacBomb.Services
         /// <param name="param">Kommandoparameter</param>
         protected void _ExecuteNonQuery(string cmdText, List<KeyValuePair<string, string>> param)
         {
-            
             _SetConnection();            
 
             _dbCommand.CommandText = cmdText;
@@ -146,8 +146,9 @@ namespace APIPacBomb.Services
 
                 _dbCommand.Prepare();
             }
-
+            
             _dbCommand.ExecuteNonQuery();
         }
+
     }
 }

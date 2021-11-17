@@ -4,6 +4,11 @@
         <name>APIPacBomb</name>
     </assembly>
     <members>
+        <member name="T:APIPacBomb.Classes.Exceptions.DatabaseResourceBusyException">
+            <summary>
+              Ausnahme wenn Nutzer nicht angemeldet ist
+            </summary>
+        </member>
         <member name="T:APIPacBomb.Classes.Exceptions.NotLoggedInException">
             <summary>
               Ausnahme wenn Nutzer nicht angemeldet ist
@@ -22,6 +27,21 @@
         <member name="T:APIPacBomb.Classes.Exceptions.StateAlreadySetException">
             <summary>
               Ausnahme wenn Nutzer nicht angemeldet ist
+            </summary>
+        </member>
+        <member name="T:APIPacBomb.Classes.ItemGeneratedEventArgs">
+            <summary>
+             Eventargumente, die bei Generierung eines neuen Items übergeben werden
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.ItemGeneratedEventArgs.Grid">
+            <summary>
+              Neue Map
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.ItemGeneratedEventArgs.NewGem">
+            <summary>
+              Neu generiete Belohnung
             </summary>
         </member>
         <member name="T:APIPacBomb.Classes.UserPlayingPair">
@@ -226,6 +246,13 @@
             <param name="userId">Eigene User-Id</param>
             <returns></returns>
         </member>
+        <member name="M:APIPacBomb.Controllers.GameController._OnRandomGemGenerated(System.Object,APIPacBomb.Classes.ItemGeneratedEventArgs)">
+            <summary>
+              Wird ausgelöst, wenn ein zufällig generiertes Item auf dem Grid abgelegt wird
+            </summary>
+            <param name="sender">Objekt, das das Event ausgelöst hat</param>
+            <param name="args">Eventargumente</param>
+        </member>
         <member name="F:APIPacBomb.Controllers.LoginController._config">
             <summary>
               Kofigurationsdaten
@@ -334,9 +361,79 @@
             <param name="id">UserId</param>
             <returns>BASE64-kodiertes Bild</returns>
         </member>
+        <member name="T:APIPacBomb.Model.Map.Bomberman">
+            <summary>
+              Klasse für Bomberman-Darstellung
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Bomberman.UserId">
+            <summary>
+              Nutzer-Id
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Bomberman.Width">
+            <summary>
+              Breit  des Bomberman
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Bomberman.X">
+            <summary>
+              X-Position
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Bomberman.Y">
+            <summary>
+              Y-Position
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Bomberman.Size">
+            <summary>
+              Größe des Models
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Bomberman.OwnedFlag">
+            <summary>
+              Eigene Flagge
+            </summary>
+        </member>
+        <member name="T:APIPacBomb.Model.Map.Flag">
+            <summary>
+              Klasse für Flaggen-Darstellung
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Flag.X">
+            <summary>
+              X-Position
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Flag.Y">
+            <summary>
+              Y-Position
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Flag.Size">
+            <summary>
+              Flaggen-Größe
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Flag.Color">
+            <summary>
+              Spielerfarbe
+            </summary>
+        </member>
         <member name="T:APIPacBomb.Model.Map.Grid">
             <summary>
               Klasse zum Darstellen einer Karte
+            </summary>
+        </member>
+        <member name="E:APIPacBomb.Model.Map.Grid.ItemGenerated">
+            <summary>
+              Wird ausgelöst, wenn ein neues Item auf der Karte erstellt wurde
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Grid.PlayingPairId">
+            <summary>
+              Id des Spielerpaares
             </summary>
         </member>
         <member name="P:APIPacBomb.Model.Map.Grid.Width">
@@ -392,6 +489,165 @@
               Wandelt die Instanz der Klasse in einen JSON-String
             </summary>
             <returns>JSON-String der Instanz der Klasse</returns>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Grid.StartRandomGeneration(System.Int32)">
+            <summary>
+              Hintergrundprozess zum zufälligen Generieren von Items
+            </summary>
+            <param name="intervallMilliSec">Intervall in Millisekunden</param>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Grid.Dispose">
+            <summary>
+              Gibt die Resourcen der Instanz wieder frei
+            </summary>
+        </member>
+        <member name="T:APIPacBomb.Model.Map.Items.Gem">
+            <summary>
+              Klasse für Belohnungen
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Items.Gem.ImageIndex">
+            <summary>
+              Bild-Index zwischen 1 und 3
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Items.Gem.Row">
+            <summary>
+              Zeile in der das Item sitzt
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Items.Gem.Column">
+            <summary>
+              Spalte in der das Item sitzt
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Items.Gem.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+              Erstellt eine Instanz eines Items für Belohnungen
+            </summary>
+            <param name="x">X-Position</param>
+            <param name="y">Y-Position</param>
+            <param name="width">Breite</param>
+            <param name="imageIndex">Bild-Index zwischen 1 und 3</param>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Items.Gem.GenerateRandom(APIPacBomb.Model.Map.Grid)">
+            <summary>
+              Erzeugt eine Belohnung auf einem zufälligen freien Feld auf der Karte
+            </summary>
+            <param name="map">Karte</param>
+            <returns>
+              Feld, wenn ein freier Platz in einem festgelegten Intervall bestimmt 
+              werden konnte, sonst null
+            </returns>
+        </member>
+        <member name="T:APIPacBomb.Model.Map.Items.Item">
+            <summary>
+              Oberklasse für alle Items
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Items.Item.Square">
+            <summary>
+              Quadrat des Items
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Items.Item.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+              Erstellt eine Instanz der Itemsklasse
+            </summary>
+            <param name="x">X-Position</param>
+            <param name="y">y-Position</param>
+            <param name="width">Breite</param>
+        </member>
+        <member name="T:APIPacBomb.Model.Map.PlayerColor">
+            <summary>
+              Spielerfarben
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Model.Map.PlayerColor.BLUE">
+            <summary>
+              Blau
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Model.Map.PlayerColor.RED">
+            <summary>
+              Rot
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Model.Map.PlayerColor.GREEN">
+            <summary>
+              Grün
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Model.Map.PlayerColor.YELLOW">
+            <summary>
+              Gelb
+            </summary>
+        </member>
+        <member name="T:APIPacBomb.Model.Map.Square">
+            <summary>
+              Klasse für Quadrate
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Square.UpperLeft">
+            <summary>
+              Linker oberer Punkt
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Square.DownLeft">
+            <summary>
+              Linker unterer Punkt
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Square.UpperRight">
+            <summary>
+              Rechter oberer Punkt
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Square.DownRight">
+            <summary>
+              Rechter unterer Punkt
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Square.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+              Erzeugt eine Instanz der Quatdratsklasse
+            </summary>
+            <param name="x">X-Position</param>
+            <param name="y">Y-Position</param>
+            <param name="width">Breite</param>
+        </member>
+        <member name="T:APIPacBomb.Model.Map.Tile">
+            <summary>
+              Klasse für Kacheln
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Tile.Width">
+            <summary>
+              Kachelbreite
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Tile.Type">
+            <summary>
+              Kacheltyp
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Tile.HasItem">
+            <summary>
+              Indikator, ob Feld mit einem Item belegt ist
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Model.Map.Tile.Item">
+            <summary>
+              Item auf der Kachel
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Tile.#ctor(APIPacBomb.Model.Map.Coord,System.Int32,APIPacBomb.Model.Map.Type)">
+            <summary>
+              Erzeugt eine Instanz einer Kachel
+            </summary>
+            <param name="coord">Linker unterer Punkt</param>
+            <param name="width">Breite</param>
+            <param name="type">Typ</param>
         </member>
         <member name="T:APIPacBomb.Model.Map.Type">
             <summary>
@@ -468,6 +724,11 @@
               WebSocket-Instanz
             </summary>
         </member>
+        <member name="P:APIPacBomb.Model.User.Bomberman">
+            <summary>
+              Spielermodel
+            </summary>
+        </member>
         <member name="M:APIPacBomb.Model.User.GeneratePasswordHash">
             <summary>
               Erzeugt das Passwort mit Hilfe der Rohdaten und dem zufälligen Secret
@@ -480,6 +741,11 @@
             <param name="password">Passwort in Klartext</param>
             <param name="secret">Zufälliges Secret</param>
             <returns>Gehashted Passwort</returns>
+        </member>
+        <member name="T:APIPacBomb.Services.DatabaseService">
+            <summary>
+              Datenbank-Service
+            </summary>
         </member>
         <member name="F:APIPacBomb.Services.DatabaseService._dbConnection">
             <summary>
@@ -631,6 +897,14 @@
             <param name="playingPairId">Id des Spielerpaars</param>
             <param name="userId">UserId des Spieler</param>
             <returns>WebSocket des Partners von userId</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.SessionService.SendMessageToAllPlayers(System.String,System.String)">
+            <summary>
+              Sendet die Stringnachricht an alle Websockets der Spieler einer 
+              Spielpaarung
+            </summary>
+            <param name="playingPairId">Id der Spielerpaarung</param>
+            <param name="message">Zu sendende Nachricht</param>
         </member>
         <member name="M:APIPacBomb.Services.SessionService.GetUserPlayingPair(System.String)">
             <summary>

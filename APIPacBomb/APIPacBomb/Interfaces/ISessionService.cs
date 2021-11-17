@@ -31,6 +31,8 @@ namespace APIPacBomb.Interfaces
 
         System.Net.WebSockets.WebSocket GetPartnerWebSocket(string playingPairId, int userId);
 
+        System.Threading.Tasks.Task SendMessageToAllPlayers(string playingPairId, string message);
+
         Classes.UserPlayingPair GetUserPlayingPair(string playingPairId);
 
         void UpdatePlayingPair(Classes.UserPlayingPair pair);

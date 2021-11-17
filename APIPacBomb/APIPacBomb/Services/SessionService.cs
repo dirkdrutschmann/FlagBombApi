@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace APIPacBomb.Services
@@ -288,6 +290,27 @@ namespace APIPacBomb.Services
         }
 
         /// <summary>
+        ///   Sendet die Stringnachricht an alle Websockets der Spieler einer 
+        ///   Spielpaarung
+        /// </summary>
+        /// <param name="playingPairId">Id der Spielerpaarung</param>
+        /// <param name="message">Zu sendende Nachricht</param>
+        public async Task SendMessageToAllPlayers(string playingPairId, string message)
+        {
+            int i = _GetIndexOfPlayingPair(playingPairId);
+
+            if (i < 0)
+            {
+                throw new Classes.Exceptions.PlayingPairNotFoundException("Spielerpaarung nicht gefunden.");
+            }
+
+            UserPlayingPair pair = _userPlayingPairs[i];
+
+            await pair.RequestedUser.WebSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(message, 0, message.Length)), WebSocketMessageType.Text, true, CancellationToken.None);
+            await pair.RequestingUser.WebSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(message, 0, message.Length)), WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        /// <summary>
         ///   Liefert eine Spielpaarung zurück
         /// </summary>
         /// <param name="playingPairId">Id des Spielerpaars</param>
@@ -413,17 +436,27 @@ namespace APIPacBomb.Services
                         continue;
                     }
 
-                    if (_userPlayingPairs[i].RequestedUser.WebSocket != null && !_userPlayingPairs[i].RequestedUser.WebSocket.CloseStatus.HasValue)
+                    if 
+                    (
+                           _userPlayingPairs[i].RequestedUser.WebSocket != null 
+                        && !_userPlayingPairs[i].RequestedUser.WebSocket.CloseStatus.HasValue 
+                        && _userPlayingPairs[i].RequestedUser.WebSocket.State != WebSocketState.Aborted
+                    )
                     {
-                        await _userPlayingPairs[i].RequestedUser.WebSocket?.CloseAsync(WebSocketCloseStatus.NormalClosure, "Expired", System.Threading.CancellationToken.None);
+                        await _userPlayingPairs[i].RequestedUser.WebSocket?.CloseAsync(WebSocketCloseStatus.NormalClosure, "Expired", CancellationToken.None);
                     }                    
                     
                     _userPlayingPairs[i].RequestedUser.WebSocket?.Dispose();
                     _userPlayingPairs[i].RequestedUser.WebSocket = null;
 
-                    if (_userPlayingPairs[i].RequestingUser.WebSocket != null && !_userPlayingPairs[i].RequestingUser.WebSocket.CloseStatus.HasValue)
+                    if 
+                    (
+                           _userPlayingPairs[i].RequestingUser.WebSocket != null 
+                        && !_userPlayingPairs[i].RequestingUser.WebSocket.CloseStatus.HasValue 
+                        && _userPlayingPairs[i].RequestingUser.WebSocket.State != WebSocketState.Aborted
+                    )
                     {
-                        await _userPlayingPairs[i].RequestingUser.WebSocket?.CloseAsync(WebSocketCloseStatus.NormalClosure, "Expired", System.Threading.CancellationToken.None);
+                        await _userPlayingPairs[i].RequestingUser.WebSocket?.CloseAsync(WebSocketCloseStatus.NormalClosure, "Expired", CancellationToken.None);
                     }                    
 
                     _userPlayingPairs[i].RequestingUser.WebSocket?.Dispose();

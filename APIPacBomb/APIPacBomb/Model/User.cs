@@ -82,6 +82,12 @@ namespace APIPacBomb.Model
         public System.Net.WebSockets.WebSocket WebSocket { get; set; }
 
         /// <summary>
+        ///   Spielermodel
+        /// </summary>
+        [JsonIgnore]
+        public Map.Bomberman Bomberman { get; set; }
+
+        /// <summary>
         ///   Erzeugt das Passwort mit Hilfe der Rohdaten und dem zufälligen Secret
         /// </summary>        
         public void GeneratePasswordHash()

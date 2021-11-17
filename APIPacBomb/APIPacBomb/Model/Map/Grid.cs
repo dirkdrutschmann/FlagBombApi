@@ -7,8 +7,21 @@ namespace APIPacBomb.Model.Map
     /// <summary>
     ///   Klasse zum Darstellen einer Karte
     /// </summary>
-    public class Grid
+    public class Grid : IDisposable
     {
+        private System.Threading.Thread _randomGenerator = null;
+
+        /// <summary>
+        ///   Wird ausgelöst, wenn ein neues Item auf der Karte erstellt wurde
+        /// </summary>
+        public event EventHandler<Classes.ItemGeneratedEventArgs> ItemGenerated;
+
+        /// <summary>
+        ///   Id des Spielerpaares
+        /// </summary>
+        [JsonIgnore]
+        public Guid PlayingPairId { get; set; }
+
         /// <summary>
         ///   Breite
         /// </summary>
@@ -170,6 +183,64 @@ namespace APIPacBomb.Model.Map
         public string ToJsonString()
         {
             return JsonConvert.SerializeObject(this);
+        }
+
+        /// <summary>
+        ///   Hintergrundprozess zum zufälligen Generieren von Items
+        /// </summary>
+        /// <param name="intervallMilliSec">Intervall in Millisekunden</param>
+        public void StartRandomGeneration(int intervallMilliSec)
+        {
+            if (Columns != null && _randomGenerator == null)
+            {
+                _randomGenerator = new System.Threading.Thread(
+                    new System.Threading.ParameterizedThreadStart(
+                        (intervall) => 
+                        { 
+                            while (true)
+                            {
+                                int itemCount = 0;
+
+                                foreach (List<Tile> column in Columns)
+                                {
+                                    itemCount += column.FindAll(r => r.HasItem).Count;
+                                }
+
+                                if (itemCount <= 5)
+                                {
+                                    Items.Gem gem = Items.Gem.GenerateRandom(this);
+
+                                    if (gem != null)
+                                    {
+                                        Columns[gem.Column][gem.Row].Item = gem;
+                                        ItemGenerated?.Invoke(this, new Classes.ItemGeneratedEventArgs() 
+                                        { 
+                                            Grid = this,
+                                            NewGem = gem
+                                        });
+                                    }
+                                }
+
+                                System.Threading.Thread.Sleep((int)intervall);
+                            }
+                        }
+                    )
+                );
+
+                _randomGenerator.Start(intervallMilliSec);
+            }
+        }
+
+        /// <summary>
+        ///   Gibt die Resourcen der Instanz wieder frei
+        /// </summary>
+        public void Dispose()
+        {
+            if (_randomGenerator != null && _randomGenerator.IsAlive)
+            {
+                _randomGenerator.Abort();
+                _randomGenerator = null;                     
+            }
         }
     }
 }
