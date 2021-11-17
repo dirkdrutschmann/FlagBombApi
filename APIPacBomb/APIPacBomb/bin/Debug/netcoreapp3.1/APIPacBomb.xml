@@ -287,6 +287,38 @@
             <param name="user">Anzumeldender Nutzer</param>
             <returns>JWT</returns>
         </member>
+        <member name="T:APIPacBomb.Controllers.RegisterController">
+            <summary>
+              Controller zur Steuerung der Registrierung eines Nutzers
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Controllers.RegisterController.#ctor(APIPacBomb.Interfaces.IUserDatabaseService)">
+            <summary>
+              Erzeugt eine Instanz des Registrierungscontrollers
+            </summary>
+            <param name="userDatabaseService">Datenbankservice</param>
+        </member>
+        <member name="M:APIPacBomb.Controllers.RegisterController.GetMail(System.String)">
+            <summary>
+              Prüft, ob eine E-Mailadresse bereits vorhanden ist
+            </summary>
+            <param name="mail">Mailadresse</param>
+            <returns>true, wenn E-Mailadresse bereits im System hinterlegt ist, sonst false</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.RegisterController.Get(System.String)">
+            <summary>
+              Prüft, ob ein Nutzername bereits im System hinterlegt ist
+            </summary>
+            <param name="username">Nutzername</param>
+            <returns>true, wenn Nutzername bereits vorahnden ist, sonst false</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.RegisterController.Post(APIPacBomb.Model.User)">
+            <summary>
+              Registriert einen Nutzers
+            </summary>
+            <param name="user">Nutzerinformationen</param>
+            <returns></returns>
+        </member>
         <member name="T:APIPacBomb.Controllers.UserController">
             <summary>
               Controllerklasse für Nutzerinteraktionen
@@ -719,6 +751,11 @@
               <code>true</code>, wenn Nutzer Adminstatus hat, sonst <code>false</code>
             </summary>
         </member>
+        <member name="P:APIPacBomb.Model.User.UserImageBase64">
+            <summary>
+              Base64-kodierter String des Nuzterbildes
+            </summary>
+        </member>
         <member name="P:APIPacBomb.Model.User.WebSocket">
             <summary>
               WebSocket-Instanz
@@ -1005,6 +1042,13 @@
             </summary>
             <param name="id">User-Id</param>
             <returns>Base64-kodierter String</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.UserDatabaseService.SetUserPricture(System.Int32,System.String)">
+            <summary>
+              Setzt das Nutzerbild
+            </summary>
+            <param name="id">Id des Nutzers</param>
+            <param name="pictureBase64">Bild Base64-kodiert</param>
         </member>
         <member name="M:APIPacBomb.Services.UserDatabaseService.SetUser(APIPacBomb.Model.User)">
             <summary>

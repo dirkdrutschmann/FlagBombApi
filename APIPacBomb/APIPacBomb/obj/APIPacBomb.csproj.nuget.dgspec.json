@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "D:\\temp\\FlagBombapi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj": {}
+    "D:\\temp\\PacBombApi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj": {}
   },
   "projects": {
-    "D:\\temp\\FlagBombapi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj": {
+    "D:\\temp\\PacBombApi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\temp\\FlagBombapi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
+        "projectUniqueName": "D:\\temp\\PacBombApi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
         "projectName": "APIPacBomb",
-        "projectPath": "D:\\temp\\FlagBombapi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
-        "packagesPath": "C:\\Users\\m.kumpf\\.nuget\\packages\\",
-        "outputPath": "D:\\temp\\FlagBombapi\\APIPacBomb\\APIPacBomb\\obj\\",
+        "projectPath": "D:\\temp\\PacBombApi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
+        "packagesPath": "C:\\Users\\Manuel\\.nuget\\packages\\",
+        "outputPath": "D:\\temp\\PacBombApi\\APIPacBomb\\APIPacBomb\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "D:\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "\\\\laek.local\\files\\Benutzer\\m.kumpf\\Anwendungsdaten\\NuGet\\NuGet.Config",
+          "C:\\Users\\Manuel\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
