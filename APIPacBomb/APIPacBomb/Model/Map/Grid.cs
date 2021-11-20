@@ -199,14 +199,20 @@ namespace APIPacBomb.Model.Map
                         { 
                             while (true)
                             {
-                                int itemCount = 0;
+                                int gemsCount = 0;
 
-                                foreach (List<Tile> column in Columns)
+                                foreach (List<Tile> rows in Columns)
                                 {
-                                    itemCount += column.FindAll(r => r.HasItem).Count;
+                                    foreach (Tile tile in rows)
+                                    {
+                                        if (tile.HasItem)
+                                        {
+                                            gemsCount++;
+                                        }
+                                    }
                                 }
 
-                                if (itemCount <= 5)
+                                if (gemsCount <= 5)
                                 {
                                     Items.Gem gem = Items.Gem.GenerateRandom(this);
 

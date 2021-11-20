@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -193,9 +195,57 @@ namespace APIPacBomb.Controllers
 
                 if (partnerWebSocket != null && !partnerWebSocket.CloseStatus.HasValue)
                 {
-                    await partnerWebSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), WebSocketMessageType.Text, true, CancellationToken.None);                    
-                }                
+                    string msg = Encoding.UTF8.GetString(buffer).Trim('\0');                    
 
+                    try
+                    {
+                        JObject json = JObject.Parse(msg);
+                        
+                        // Gem collected
+                        if ((string)json["class"] == "GemCollected")
+                        {
+                            bool found = false;
+                            string itemId = (string)json["objectValue"]["itemId"];
+
+                            for (int i = 0; i < pair.Map.Columns.Count; i++)
+                            {
+                                List<Model.Map.Tile> tilesWithItem = pair.Map.Columns[i].FindAll(r => r.HasItem);
+
+                                if (tilesWithItem.Count == 0)
+                                {
+                                    continue;
+                                }
+
+                                for (int k = 0; k < tilesWithItem.Count; k++)
+                                {
+                                    Model.Map.Tile tile = tilesWithItem[k];
+
+                                    if (tile.Item.Id.ToString().ToLower() == itemId.ToLower())
+                                    {
+                                        pair.Map.Columns[tile.Item.Column][tile.Item.Row].Item = null;
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (found)
+                                {
+                                    break;
+                                }
+                            }                            
+                        }
+
+                        _SessionService.UpdatePlayingPair(pair);
+                    }
+                    catch (JsonReaderException e)
+                    {
+                        _Logger.LogWarning(string.Format("Nachricht von {0} der Spielerpaarung {1} ist kein JSON :{2}", userId, pair.Id.ToString(), msg));
+                    }
+                    
+                    await partnerWebSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), WebSocketMessageType.Text, true, CancellationToken.None);                    
+                }
+
+                buffer = new byte[1024 * 4];
                 result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             }
 

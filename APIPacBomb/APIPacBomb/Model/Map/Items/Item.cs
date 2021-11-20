@@ -12,6 +12,12 @@ namespace APIPacBomb.Model.Map.Items
     public class Item
     {
         /// <summary>
+        ///   Id des Items
+        /// </summary>
+        [JsonProperty("itemId")]
+        public Guid Id { get; set; }
+
+        /// <summary>
         ///   Quadrat des Items
         /// </summary>
         [JsonProperty("square")]
@@ -26,6 +32,7 @@ namespace APIPacBomb.Model.Map.Items
         public Item (int x, int y, int width)
         {
             Square = new Square(x, y, width);
+            Id = Guid.NewGuid();
         }
     }
 }

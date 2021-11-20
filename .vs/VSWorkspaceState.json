@@ -4,8 +4,9 @@
     "\\APIPacBomb",
     "\\APIPacBomb\\APIPacBomb",
     "\\APIPacBomb\\APIPacBomb\\Controllers",
-    "\\APIPacBomb\\APIPacBomb\\Model"
+    "\\APIPacBomb\\APIPacBomb\\Model",
+    "\\APIPacBomb\\APIPacBomb\\Services"
   ],
-  "SelectedNode": "\\APIPacBomb\\APIPacBomb.sln",
+  "SelectedNode": "\\APIPacBomb\\APIPacBomb\\Services\\DatabaseService.cs",
   "PreviewInSolutionExplorer": false
 }

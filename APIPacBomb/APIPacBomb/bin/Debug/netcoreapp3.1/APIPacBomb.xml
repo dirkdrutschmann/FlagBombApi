@@ -577,6 +577,11 @@
               Oberklasse für alle Items
             </summary>
         </member>
+        <member name="P:APIPacBomb.Model.Map.Items.Item.Id">
+            <summary>
+              Id des Items
+            </summary>
+        </member>
         <member name="P:APIPacBomb.Model.Map.Items.Item.Square">
             <summary>
               Quadrat des Items
