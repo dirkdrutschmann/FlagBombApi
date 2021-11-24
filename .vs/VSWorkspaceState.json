@@ -5,8 +5,9 @@
     "\\APIPacBomb\\APIPacBomb",
     "\\APIPacBomb\\APIPacBomb\\Controllers",
     "\\APIPacBomb\\APIPacBomb\\Model",
+    "\\APIPacBomb\\APIPacBomb\\Model\\Map",
     "\\APIPacBomb\\APIPacBomb\\Services"
   ],
-  "SelectedNode": "\\APIPacBomb\\APIPacBomb\\Controllers\\GameController.cs",
+  "SelectedNode": "\\APIPacBomb\\APIPacBomb.sln",
   "PreviewInSolutionExplorer": false
 }

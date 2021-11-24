@@ -134,6 +134,31 @@
             <param name="requestingUser">Anfragender Nutzer</param>
             <param name="requestedUser">Angefragter Nutzer</param>
         </member>
+        <member name="T:APIPacBomb.Classes.Requests.MapRequest">
+            <summary>
+              Body für Spielanfrage
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Requests.MapRequest.Width">
+            <summary>
+              Spielfeldbreite
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Requests.MapRequest.Height">
+            <summary>
+              Spielfeldhoehe
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Requests.MapRequest.SquareFactor">
+            <summary>
+              Groesse der Kacheln
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Requests.MapRequest.CaptureFlagCount">
+            <summary>
+              Anzahl der Capture-Events
+            </summary>
+        </member>
         <member name="T:APIPacBomb.Classes.Responses.StdResponse">
             <summary>
               Klasse für Standard-Antworten vom Server
@@ -493,6 +518,11 @@
               Höhe
             </summary>
         </member>
+        <member name="P:APIPacBomb.Model.Map.Grid.CaptureFlagCount">
+            <summary>
+              Anzahl der Flaggeneroberungen
+            </summary>
+        </member>
         <member name="P:APIPacBomb.Model.Map.Grid.Columns">
             <summary>
               Spalten mit Zeilen
@@ -518,13 +548,14 @@
               Wurde die Map bereits einmal während der Lifetime generiert
             </summary>
         </member>
-        <member name="M:APIPacBomb.Model.Map.Grid.#ctor(System.Int32,System.Int32,System.Int32)">
+        <member name="M:APIPacBomb.Model.Map.Grid.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
               Erstellt eine Instanz der Grid-Klasse
             </summary>
             <param name="width">Breite</param>
             <param name="height">Höhe</param>
             <param name="squareFactor">Größe der Quadrate in Pixel</param>
+            <param name="captureFlagCount">Anzahl der Flaggeneroberungen</param>
         </member>
         <member name="M:APIPacBomb.Model.Map.Grid.GenerateMap">
             <summary>
@@ -900,6 +931,7 @@
             </summary>
             <param name="user">Anfragender Nutzer</param>
             <param name="requestedUserId">Angefragter Nutzer</param>
+            <param name="mapConfig">Map-Konfiguration</param>
             <param name="context">HTTP-Context der Anfrage</param>
         </member>
         <member name="M:APIPacBomb.Services.SessionService.GetPlayRequest(APIPacBomb.Model.User,System.Boolean)">

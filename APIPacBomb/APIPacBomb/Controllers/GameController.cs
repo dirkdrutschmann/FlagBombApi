@@ -49,7 +49,7 @@ namespace APIPacBomb.Controllers
         [HttpGet("map")]
         public IActionResult Get([FromBody] Classes.Requests.MapRequest mapSettings)
         {
-            Model.Map.Grid grid = new Model.Map.Grid(mapSettings.Width, mapSettings.Height, mapSettings.SquareFactor);
+            Model.Map.Grid grid = new Model.Map.Grid(mapSettings.Width, mapSettings.Height, mapSettings.SquareFactor, mapSettings.CaptureFlagCount);
             grid.GenerateMap();
 
             return Ok(grid);
@@ -286,14 +286,14 @@ namespace APIPacBomb.Controllers
 
                 int columnIndex = pair.Map.RowCount / 2;
 
-                if (pair.Map.Columns[1][columnIndex].Type == Model.Map.Type.WALL)
+                if (pair.Map.Columns[0][columnIndex].Type == Model.Map.Type.WALL)
                 {
                     columnIndex++;
                 }
 
                 int rowIndex = pair.Map.ColumnCount / 2;
 
-                if (pair.Map.Columns[rowIndex][2].Type == Model.Map.Type.WALL)
+                if (pair.Map.Columns[rowIndex][1].Type == Model.Map.Type.WALL)
                 {
                     rowIndex++;
                 }

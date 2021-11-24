@@ -22,7 +22,7 @@ namespace APIPacBomb.Services
 
         private List<UserPlayingPair> _userPlayingPairs = new List<UserPlayingPair>();
 
-        private System.Threading.Thread _ExpiryThread;
+        private Thread _ExpiryThread;
 
         /// <summary>
         ///   Wird ausgelöst, wenn alle Spielpartner verbunden sind
@@ -111,6 +111,7 @@ namespace APIPacBomb.Services
         /// </summary>
         /// <param name="user">Anfragender Nutzer</param>
         /// <param name="requestedUserId">Angefragter Nutzer</param>
+        /// <param name="mapConfig">Map-Konfiguration</param>
         /// <param name="context">HTTP-Context der Anfrage</param>
         public void SendPlayRequest(Model.User user, int requestedUserId, Model.Map.Grid mapConfig, HttpContext context)
         {
@@ -431,7 +432,7 @@ namespace APIPacBomb.Services
                         continue;
                     }
 
-                    if ((DateTime.Now - pair.RequestTime).TotalSeconds < 120 && pair.Status != UserPlayingPair.PlayingStatus.GAME_OVER)
+                    if ((DateTime.Now - pair.RequestTime).TotalSeconds < 120 && pair.Status != UserPlayingPair.PlayingStatus.REJECTED)
                     {
                         continue;
                     }
@@ -476,7 +477,7 @@ namespace APIPacBomb.Services
 
                 }
 
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(1000);
             }
         }
 

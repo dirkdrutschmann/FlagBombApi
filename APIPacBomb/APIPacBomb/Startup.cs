@@ -1,4 +1,3 @@
-using APIPacBomb.Middleware;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -34,8 +33,6 @@ namespace APIPacBomb
 
             services.AddSingleton<Interfaces.IUserDatabaseService>(database);
             services.AddSingleton<Interfaces.ISessionService, Services.SessionService>();
-
-            //services.AddWebSocketManager();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option => {
@@ -80,9 +77,6 @@ namespace APIPacBomb
                 app.UseDeveloperExceptionPage();
             }
 
-            //var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
-            //var serviceProvider = serviceScopeFactory.CreateScope().ServiceProvider;
-
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
@@ -100,8 +94,6 @@ namespace APIPacBomb
             app.UseAuthorization();
 
             app.UseWebSockets();
-
-            //app.MapWebSocketManger("/api/game/ws", serviceProvider.GetService<Classes.MessageHandler>());
 
             app.UseEndpoints(endpoints =>
             {

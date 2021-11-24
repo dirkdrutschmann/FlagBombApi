@@ -35,6 +35,12 @@ namespace APIPacBomb.Model.Map
         public int Heigth { get; set; }
 
         /// <summary>
+        ///   Anzahl der Flaggeneroberungen
+        /// </summary>
+        [JsonProperty("captureFlagCount")]
+        public int CaptureFlagCount { get; set; }
+
+        /// <summary>
         ///   Spalten mit Zeilen
         /// </summary>
         [JsonProperty("columns")]
@@ -70,13 +76,15 @@ namespace APIPacBomb.Model.Map
         /// <param name="width">Breite</param>
         /// <param name="height">Höhe</param>
         /// <param name="squareFactor">Größe der Quadrate in Pixel</param>
-        public Grid(int width, int height, int squareFactor)
+        /// <param name="captureFlagCount">Anzahl der Flaggeneroberungen</param>
+        public Grid(int width, int height, int squareFactor, int captureFlagCount)
         {
             Width = width;
             Heigth = height;
             ColumnCount = width / squareFactor;
             RowCount = (height - 20) / squareFactor;
             SquareFactor = squareFactor;
+            CaptureFlagCount = captureFlagCount;
 
             Columns = new List<List<Tile>>();
             IsGeneratedOnce = false;
