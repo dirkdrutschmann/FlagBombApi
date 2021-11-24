@@ -12,6 +12,12 @@ namespace APIPacBomb.Model.Map
     public class Flag
     {
         /// <summary>
+        ///   Id der Flagge
+        /// </summary>
+        [JsonProperty("id")]
+        public Guid Id { get; set;}
+
+        /// <summary>
         ///   X-Position
         /// </summary>
         [JsonProperty("x")]
@@ -34,6 +40,14 @@ namespace APIPacBomb.Model.Map
         /// </summary>
         [JsonProperty("color")]
         public PlayerColor Color { get; set; }
+
+        /// <summary>
+        ///   Erstellt eine Instanz der Klassenflagge
+        /// </summary>
+        public Flag()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 
 }

@@ -284,17 +284,32 @@ namespace APIPacBomb.Controllers
 
                 _Logger.LogInformation(string.Format("Spielermodels fuer Spielerpaarung {0} wird erzeugt.", pair.Id.ToString()));
 
+                int columnIndex = pair.Map.RowCount / 2;
+
+                if (pair.Map.Columns[1][columnIndex].Type == Model.Map.Type.WALL)
+                {
+                    columnIndex++;
+                }
+
+                int rowIndex = pair.Map.ColumnCount / 2;
+
+                if (pair.Map.Columns[rowIndex][2].Type == Model.Map.Type.WALL)
+                {
+                    rowIndex++;
+                }
+
                 pair.RequestedUser.Bomberman = new Model.Map.Bomberman()
                 {
                     UserId = pair.RequestedUser.Id,
-                    X = 0,
-                    Y = pair.Map.SquareFactor,
+                    Username = pair.RequestedUser.Username,
+                    X = pair.Map.Columns[0][columnIndex].DownLeft.X,
+                    Y = pair.Map.Columns[0][columnIndex].DownLeft.Y,
                     Width = pair.Map.SquareFactor,
                     Size = pair.Map.SquareFactor,
                     OwnedFlag = new Model.Map.Flag()
                     {
-                        X = pair.Map.Columns[(pair.Map.ColumnCount / 2) + 1][1].DownLeft.X,
-                        Y = pair.Map.Columns[(pair.Map.ColumnCount / 2) + 1][1].DownLeft.Y,
+                        X = pair.Map.Columns[rowIndex][1].DownLeft.X,
+                        Y = pair.Map.Columns[rowIndex][1].DownLeft.Y,
                         Size = pair.Map.SquareFactor,
                         Color = Model.Map.PlayerColor.BLUE
                     }
@@ -303,14 +318,15 @@ namespace APIPacBomb.Controllers
                 pair.RequestingUser.Bomberman = new Model.Map.Bomberman()
                 {
                     UserId = pair.RequestingUser.Id,
-                    X = pair.Map.Columns[(pair.Map.ColumnCount - 1)][pair.Map.RowCount - 1].DownLeft.X,
-                    Y = pair.Map.Columns[(pair.Map.ColumnCount - 1)][pair.Map.RowCount - 1].DownLeft.Y,
+                    Username = pair.RequestingUser.Username,
+                    X = pair.Map.Columns[pair.Map.ColumnCount - 1][columnIndex].DownLeft.X,
+                    Y = pair.Map.Columns[pair.Map.ColumnCount - 1][columnIndex].DownLeft.Y,
                     Width = pair.Map.SquareFactor,
                     Size = pair.Map.SquareFactor,
                     OwnedFlag = new Model.Map.Flag()
                     {
-                        X = pair.Map.Columns[(pair.Map.ColumnCount / 2) + 1][pair.Map.RowCount - 3].DownLeft.X,
-                        Y = pair.Map.Columns[(pair.Map.ColumnCount / 2) + 1][pair.Map.RowCount - 3].DownLeft.Y,
+                        X = pair.Map.Columns[rowIndex][pair.Map.RowCount - 3].DownLeft.X,
+                        Y = pair.Map.Columns[rowIndex][pair.Map.RowCount - 3].DownLeft.Y,
                         Size = pair.Map.SquareFactor,
                         Color = Model.Map.PlayerColor.RED
                     }
@@ -320,8 +336,8 @@ namespace APIPacBomb.Controllers
 
                 string bomberManJson = new Classes.Responses.WebSocketObjectResponse()
                 {
-                    Class = pair.RequestedUser.Bomberman.GetType().Name,
-                    ObjectValue = pair.RequestedUser.Bomberman
+                    Class = pair.RequestingUser.Bomberman.GetType().Name,
+                    ObjectValue = pair.RequestingUser.Bomberman
                 }.ToJsonString();
 
                 // An Spieler senden
@@ -329,9 +345,9 @@ namespace APIPacBomb.Controllers
 
                 bomberManJson = new Classes.Responses.WebSocketObjectResponse()
                 {
-                    Class = pair.RequestingUser.Bomberman.GetType().Name,
-                    ObjectValue = pair.RequestingUser.Bomberman
-                }.ToJsonString();
+                    Class = pair.RequestedUser.Bomberman.GetType().Name,
+                    ObjectValue = pair.RequestedUser.Bomberman
+                }.ToJsonString();                
 
                 await _SessionService.SendMessageToAllPlayers(pair.Id.ToString(), bomberManJson);
 

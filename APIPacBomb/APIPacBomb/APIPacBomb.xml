@@ -403,6 +403,11 @@
               Nutzer-Id
             </summary>
         </member>
+        <member name="P:APIPacBomb.Model.Map.Bomberman.Username">
+            <summary>
+              Nutzername
+            </summary>
+        </member>
         <member name="P:APIPacBomb.Model.Map.Bomberman.Width">
             <summary>
               Breit  des Bomberman
@@ -433,6 +438,11 @@
               Klasse für Flaggen-Darstellung
             </summary>
         </member>
+        <member name="P:APIPacBomb.Model.Map.Flag.Id">
+            <summary>
+              Id der Flagge
+            </summary>
+        </member>
         <member name="P:APIPacBomb.Model.Map.Flag.X">
             <summary>
               X-Position
@@ -451,6 +461,11 @@
         <member name="P:APIPacBomb.Model.Map.Flag.Color">
             <summary>
               Spielerfarbe
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Model.Map.Flag.#ctor">
+            <summary>
+              Erstellt eine Instanz der Klassenflagge
             </summary>
         </member>
         <member name="T:APIPacBomb.Model.Map.Grid">

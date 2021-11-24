@@ -7,6 +7,6 @@
     "\\APIPacBomb\\APIPacBomb\\Model",
     "\\APIPacBomb\\APIPacBomb\\Services"
   ],
-  "SelectedNode": "\\APIPacBomb\\APIPacBomb\\Services\\DatabaseService.cs",
+  "SelectedNode": "\\APIPacBomb\\APIPacBomb\\Controllers\\GameController.cs",
   "PreviewInSolutionExplorer": false
 }

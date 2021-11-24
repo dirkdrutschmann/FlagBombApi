@@ -18,6 +18,12 @@ namespace APIPacBomb.Model.Map
         public int UserId { get; set; }
 
         /// <summary>
+        ///   Nutzername
+        /// </summary>
+        [JsonProperty("username")]
+        public string Username { get; set;}
+
+        /// <summary>
         ///   Breit  des Bomberman
         /// </summary>
         [JsonProperty("width")]
