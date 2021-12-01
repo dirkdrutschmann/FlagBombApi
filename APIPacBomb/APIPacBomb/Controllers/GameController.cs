@@ -49,7 +49,7 @@ namespace APIPacBomb.Controllers
         [HttpGet("map")]
         public IActionResult Get([FromBody] Classes.Requests.MapRequest mapSettings)
         {
-            Model.Map.Grid grid = new Model.Map.Grid(mapSettings.Width, mapSettings.Height, mapSettings.SquareFactor, mapSettings.CaptureFlagCount);
+            Model.Map.Grid grid = new Model.Map.Grid(mapSettings.Width, mapSettings.Height, mapSettings.SquareFactor, mapSettings.CaptureFlagCount, mapSettings.BombsAtStart);
             grid.GenerateMap();
 
             return Ok(grid);

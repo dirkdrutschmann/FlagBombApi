@@ -41,6 +41,12 @@ namespace APIPacBomb.Model.Map
         public int CaptureFlagCount { get; set; }
 
         /// <summary>
+        ///   Bombenanzahl zu Spielbeginn
+        /// </summary>
+        [JsonProperty("bombsAtStart")]
+        public int BombsAtStart { get; set; }
+
+        /// <summary>
         ///   Spalten mit Zeilen
         /// </summary>
         [JsonProperty("columns")]
@@ -77,7 +83,8 @@ namespace APIPacBomb.Model.Map
         /// <param name="height">Höhe</param>
         /// <param name="squareFactor">Größe der Quadrate in Pixel</param>
         /// <param name="captureFlagCount">Anzahl der Flaggeneroberungen</param>
-        public Grid(int width, int height, int squareFactor, int captureFlagCount)
+        /// <param name="bombsAtStart">Bombenanzahl zu Spielbeginn</param>
+        public Grid(int width, int height, int squareFactor, int captureFlagCount, int bombsAtStart)
         {
             Width = width;
             Heigth = height;
@@ -85,6 +92,7 @@ namespace APIPacBomb.Model.Map
             RowCount = (height - 20) / squareFactor;
             SquareFactor = squareFactor;
             CaptureFlagCount = captureFlagCount;
+            BombsAtStart = bombsAtStart;
 
             Columns = new List<List<Tile>>();
             IsGeneratedOnce = false;

@@ -80,7 +80,7 @@ namespace APIPacBomb.Controllers
 
             try
             {
-                _sessionService.SendPlayRequest(user, id, new Model.Map.Grid(mapConfig.Width, mapConfig.Height, mapConfig.SquareFactor, mapConfig.CaptureFlagCount), HttpContext);
+                _sessionService.SendPlayRequest(user, id, new Model.Map.Grid(mapConfig.Width, mapConfig.Height, mapConfig.SquareFactor, mapConfig.CaptureFlagCount, mapConfig.BombsAtStart), HttpContext);
 
                 response.Success = true;
                 response.Message = string.Format("Spieleanfrage erfolgreich an {0} gesendet.", _sessionService.GetUser(id).Username);
