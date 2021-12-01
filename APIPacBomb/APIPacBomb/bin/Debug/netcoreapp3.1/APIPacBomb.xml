@@ -241,11 +241,13 @@
               Controller für Spielrequests
             </summary>
         </member>
-        <member name="M:APIPacBomb.Controllers.GameController.#ctor(APIPacBomb.Interfaces.ISessionService,Microsoft.Extensions.Logging.ILogger{APIPacBomb.Controllers.GameController})">
+        <member name="M:APIPacBomb.Controllers.GameController.#ctor(APIPacBomb.Interfaces.ISessionService,Microsoft.Extensions.Logging.ILogger{APIPacBomb.Controllers.GameController},APIPacBomb.Interfaces.IGameDatabaseService)">
             <summary>
               Erstellt eine Instanz der Game-Controller-Klasse
             </summary>
             <param name="sessionService">SessionService-Instanz</param>
+            <param name="logger">Logging-Dienst</param>
+            <param name="gameDatebaseServie">Datenbank-Dienst für Spieleinträge</param>
         </member>
         <member name="M:APIPacBomb.Controllers.GameController.Get(APIPacBomb.Classes.Requests.MapRequest)">
             <summary>
@@ -927,6 +929,33 @@
             <summary>
               Implementiert und Startet den Queue-Thread
             </summary>
+        </member>
+        <member name="T:APIPacBomb.Services.GameDatabaseService">
+            <summary>
+              Datenbankservice für Spielinformationen
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Services.GameDatabaseService.#ctor(System.String,System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+              Erstellt eine Instanz des Datenbankdienstes
+            </summary>
+            <param name="user">DB-Nutzername</param>
+            <param name="pass">DB-Passwort</param>
+            <param name="server">DB-Server</param>
+            <param name="database">DB-Name</param>
+            <param name="logger">Logger</param>
+        </member>
+        <member name="M:APIPacBomb.Services.GameDatabaseService.WriteGame(APIPacBomb.Classes.UserPlayingPair)">
+            <summary>
+              Schreibt den Datenbankeintrag für ein abgeschlossenes Spiel
+            </summary>
+            <param name="pair">Spielpaarung</param>
+        </member>
+        <member name="M:APIPacBomb.Services.GameDatabaseService.WriteUsers(APIPacBomb.Classes.UserPlayingPair)">
+            <summary>
+              Schreibt die Datenbankeinträge für die teilgenommenen Nutzer
+            </summary>
+            <param name="pair">Spielpaarung</param>
         </member>
         <member name="T:APIPacBomb.Services.SessionService">
             <summary>

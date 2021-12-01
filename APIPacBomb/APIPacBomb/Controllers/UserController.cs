@@ -148,7 +148,7 @@ namespace APIPacBomb.Controllers
         /// <returns>StdResponse</returns>
         [Authorize]
         [HttpPost("AcceptPlayRequest/{id}")]
-        public async Task<IActionResult> PostAcceptPlayRequest(int id)
+        public IActionResult PostAcceptPlayRequest(int id)
         {
             Model.User requestedUser = _sessionService.GetUser(Classes.Util.GetUsernameFromToken(HttpContext));            
 

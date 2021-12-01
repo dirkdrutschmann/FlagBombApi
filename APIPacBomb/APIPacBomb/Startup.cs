@@ -23,19 +23,6 @@ namespace APIPacBomb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            //ILogger dbLogger =  .GetService<ILoggerFactory>().CreateLogger<Services.DatabaseService>();
-            //ILogger dbLogger = loggerFactory.CreateLogger<Services.DatabaseService>();
-
-            //var database = new Services.UserDatabaseService(
-                //    Configuration["Db:user"],
-                //    Configuration["Db:pass"],
-                //    Configuration["Db:server"],
-                //    Configuration["Db:database"]
-                //);            
-
-            //services.AddSingleton<Interfaces.IUserDatabaseService>(database);
-
             services.AddSingleton<Interfaces.IUserDatabaseService>(provider =>
             {                
                 return new Services.UserDatabaseService(
@@ -45,6 +32,16 @@ namespace APIPacBomb
                     Configuration["Db:database"],
                     provider.GetService<ILoggerFactory>().CreateLogger<Services.DatabaseService>()
                 );               
+            });
+
+            services.AddSingleton<Interfaces.IGameDatabaseService>(provider => {
+                return new Services.GameDatabaseService(
+                    Configuration["Db:user"],
+                    Configuration["Db:pass"],
+                    Configuration["Db:server"],
+                    Configuration["Db:database"],
+                    provider.GetService<ILoggerFactory>().CreateLogger<Services.GameDatabaseService>()
+                );
             });
 
             services.AddSingleton<Interfaces.ISessionService, Services.SessionService>();

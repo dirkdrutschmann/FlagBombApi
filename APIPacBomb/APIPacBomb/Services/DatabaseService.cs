@@ -83,6 +83,12 @@ namespace APIPacBomb.Services
         ~DatabaseService()
         {
             _stopThread = true;
+            
+            _dbExecuteConnection.Dispose();
+            _dbExecuteConnection = null;
+
+            _dbSelectConnection.Dispose();
+            _dbSelectConnection = null;
         }
 
         /// <summary>
@@ -93,6 +99,8 @@ namespace APIPacBomb.Services
         {
             if (_dbExecuteConnection.State == ConnectionState.Closed || _dbExecuteConnection.State == ConnectionState.Broken)
             {
+                _dbExecuteConnection.Dispose();
+
                 _dbExecuteConnection = new MySqlConnection(_ConnectionString);
                 _dbExecuteConnection.Open();
             }
@@ -108,6 +116,8 @@ namespace APIPacBomb.Services
         {
             if (_dbSelectConnection.State == ConnectionState.Closed || _dbSelectConnection.State == ConnectionState.Broken)
             {
+                _dbSelectConnection.Dispose();
+
                 _dbSelectConnection = new MySqlConnection(_ConnectionString);
                 _dbSelectConnection.Open();
             }

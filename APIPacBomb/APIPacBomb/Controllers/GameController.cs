@@ -28,16 +28,21 @@ namespace APIPacBomb.Controllers
 
         private ILogger<GameController> _Logger;
 
+        private Interfaces.IGameDatabaseService _GameDatabaseService;
+
         /// <summary>
         ///   Erstellt eine Instanz der Game-Controller-Klasse
         /// </summary>
         /// <param name="sessionService">SessionService-Instanz</param>
-        public GameController(Interfaces.ISessionService sessionService, ILogger<GameController> logger)
+        /// <param name="logger">Logging-Dienst</param>
+        /// <param name="gameDatebaseServie">Datenbank-Dienst für Spieleinträge</param>
+        public GameController(Interfaces.ISessionService sessionService, ILogger<GameController> logger, Interfaces.IGameDatabaseService gameDatebaseServie)
         {
             _SessionService = sessionService;
             _SessionService.AllPartnersConnected += _OnAllPartnersConnected;
 
             _Logger = logger;
+            _GameDatabaseService = gameDatebaseServie;
         }
 
         /// <summary>
@@ -113,6 +118,9 @@ namespace APIPacBomb.Controllers
 
                 pair.Status = Classes.UserPlayingPair.PlayingStatus.GAME_OVER;
                 _SessionService.UpdatePlayingPair(pair);
+
+                _GameDatabaseService.WriteGame(pair);
+                _GameDatabaseService.WriteUsers(pair);
 
                 response.Message = "Spiel vorbei";
             }
