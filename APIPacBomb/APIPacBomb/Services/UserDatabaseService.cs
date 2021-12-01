@@ -1,4 +1,5 @@
 ﻿using APIPacBomb.Model;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,8 @@ namespace APIPacBomb.Services
         /// <param name="pass">DB-Passwort</param>
         /// <param name="server">DB-Server</param>
         /// <param name="database">DB-Name</param>
-        public UserDatabaseService(string user, string pass, string server, string database) : base(user, pass, server, database)
+        /// <param name="logger">Logger</param>
+        public UserDatabaseService(string user, string pass, string server, string database, ILogger logger) : base(user, pass, server, database, logger)
         { }
 
         /// <summary>
@@ -191,21 +193,15 @@ namespace APIPacBomb.Services
         {
             byte[] picture = Convert.FromBase64String(pictureBase64);            
 
-            string cmd = "update pb_users " +
-                         "set    picture = @pic " +
-                         "where  id = @id";
+            string cmdText = "update pb_users " +
+                             "set    picture = @pic " +
+                             "where  id = @id";
 
-            _SetConnection();
+            MySqlCommand cmd = new MySqlCommand(cmdText);     
+            cmd.Parameters.AddWithValue("@pic", picture);
+            cmd.Parameters.AddWithValue("@id", id);
 
-            _dbCommand.CommandText = cmd;
-            _dbCommand.Parameters.Clear();
-            _dbCommand.Parameters.AddWithValue("@pic", picture);
-            _dbCommand.Parameters.AddWithValue("@id", id);
-
-            _dbCommand.Prepare();
-
-            _dbCommand.ExecuteNonQuery();
-
+            _ExecuteNonQuery(cmd);
 
         }
 

@@ -846,14 +846,34 @@
               Datenbank-Service
             </summary>
         </member>
-        <member name="F:APIPacBomb.Services.DatabaseService._dbConnection">
+        <member name="F:APIPacBomb.Services.DatabaseService._logger">
             <summary>
-              Datenbankverbindung
+              Logger-Instanz
             </summary>
         </member>
-        <member name="F:APIPacBomb.Services.DatabaseService._dbCommand">
+        <member name="F:APIPacBomb.Services.DatabaseService._stopThread">
             <summary>
-              Datenbankcommand
+              Steuervariable für Thread
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Services.DatabaseService._queueThread">
+            <summary>
+              Thread für Queueabarbeitung
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Services.DatabaseService._commandQueue">
+            <summary>
+              Abarbeitungsreihe von Befehlen
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Services.DatabaseService._dbExecuteConnection">
+            <summary>
+              Datenbankverbindung für DML
+            </summary>
+        </member>
+        <member name="F:APIPacBomb.Services.DatabaseService._dbSelectConnection">
+            <summary>
+              Datenbankverbindung für SQL
             </summary>
         </member>
         <member name="F:APIPacBomb.Services.DatabaseService._ConnectionString">
@@ -861,12 +881,7 @@
               Verbindungszeichenkette
             </summary>
         </member>
-        <member name="P:APIPacBomb.Services.DatabaseService._CurrentConnectionRetries">
-            <summary>
-              Verbindungsversuche
-            </summary>
-        </member>
-        <member name="M:APIPacBomb.Services.DatabaseService.#ctor(System.String,System.String,System.String,System.String)">
+        <member name="M:APIPacBomb.Services.DatabaseService.#ctor(System.String,System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger)">
             <summary>
               Erstellt eine Instanz des Datenbankdienstes
             </summary>
@@ -874,8 +889,20 @@
             <param name="pass">DB-Passwort</param>
             <param name="server">DB-Server</param>
             <param name="database">DB-Name</param>
+            <param name="logger">Logger</param>
         </member>
-        <member name="M:APIPacBomb.Services.DatabaseService._SetConnection">
+        <member name="M:APIPacBomb.Services.DatabaseService.Finalize">
+            <summary>
+              Destruktor
+            </summary>
+        </member>
+        <member name="M:APIPacBomb.Services.DatabaseService._GetDMLConnection">
+            <summary>
+              Liefert die geöffnete Datenbankverbindung zurück
+            </summary>
+            <returns>Datenbankverbindung</returns>
+        </member>
+        <member name="M:APIPacBomb.Services.DatabaseService._GetSQLConnection">
             <summary>
               Liefert die geöffnete Datenbankverbindung zurück
             </summary>
@@ -895,6 +922,11 @@
             </summary>
             <param name="cmdText">Kommando</param>
             <param name="param">Kommandoparameter</param>
+        </member>
+        <member name="M:APIPacBomb.Services.DatabaseService._StartQueueThread">
+            <summary>
+              Implementiert und Startet den Queue-Thread
+            </summary>
         </member>
         <member name="T:APIPacBomb.Services.SessionService">
             <summary>
@@ -1060,7 +1092,7 @@
               Löscht alle Anfragen, die abgelehnt oder gestellt wurden und älter als 30 Sekunden sind
             </summary>
         </member>
-        <member name="M:APIPacBomb.Services.UserDatabaseService.#ctor(System.String,System.String,System.String,System.String)">
+        <member name="M:APIPacBomb.Services.UserDatabaseService.#ctor(System.String,System.String,System.String,System.String,Microsoft.Extensions.Logging.ILogger)">
             <summary>
               Erstellt eine Instanz des Datenbankdienstes
             </summary>
@@ -1068,6 +1100,7 @@
             <param name="pass">DB-Passwort</param>
             <param name="server">DB-Server</param>
             <param name="database">DB-Name</param>
+            <param name="logger">Logger</param>
         </member>
         <member name="M:APIPacBomb.Services.UserDatabaseService.ExistsMail(System.String)">
             <summary>
