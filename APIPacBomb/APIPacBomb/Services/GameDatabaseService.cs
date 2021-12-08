@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -126,6 +127,40 @@ namespace APIPacBomb.Services
             {
                 _logger.LogError(ex, "PB_PLAYERS-Insert fehlgeschlagen fuer {0}.", pair.Id.ToString());
             }
+        }
+
+        /// <summary>
+        ///   Liefert die Spielehistory eines Nutzers
+        /// </summary>
+        /// <param name="uid">UserId</param>
+        public List<Classes.Responses.GameHistoryEntry> GetGameHistory(int uid)
+        {
+            string cmdText = "select g.requested_on, " +
+                             "       group_concat(u.username separator ', ') as opponent " +
+                             "from   `pb_games`   g, " +
+                             "       `pb_players` p, " +
+                             "       `pb_users`   u " +
+                             "where  g.pair_id = p.pair_id " +
+                             "and    p.uid = u.id " +
+                             "and    p.uid != @uid " +
+                             "group  by g.pair_id " +
+                             "order  by 1 desc " +
+                             "limit  10 ";
+            MySqlCommand command = new MySqlCommand(cmdText);
+            command.Parameters.AddWithValue("@uid", uid);
+
+            List<Classes.Responses.GameHistoryEntry> gameHistory = new List<Classes.Responses.GameHistoryEntry>();
+
+            foreach(IDataRecord record in _ExecuteQuery(command))
+            {
+                gameHistory.Add(new Classes.Responses.GameHistoryEntry()
+                {
+                    RequestedOn  = record.GetDateTime(record.GetOrdinal("requested_on")),
+                    Opponent = record.GetString(record.GetOrdinal("opponent"))
+                });
+            }
+
+            return gameHistory;
         }
     }
 }

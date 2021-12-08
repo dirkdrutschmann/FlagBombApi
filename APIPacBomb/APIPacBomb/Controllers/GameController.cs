@@ -30,19 +30,22 @@ namespace APIPacBomb.Controllers
 
         private Interfaces.IGameDatabaseService _GameDatabaseService;
 
+        private Interfaces.IUserDatabaseService _UserDatabaseService;
+
         /// <summary>
         ///   Erstellt eine Instanz der Game-Controller-Klasse
         /// </summary>
         /// <param name="sessionService">SessionService-Instanz</param>
         /// <param name="logger">Logging-Dienst</param>
         /// <param name="gameDatebaseServie">Datenbank-Dienst für Spieleinträge</param>
-        public GameController(Interfaces.ISessionService sessionService, ILogger<GameController> logger, Interfaces.IGameDatabaseService gameDatebaseServie)
+        public GameController(Interfaces.ISessionService sessionService, ILogger<GameController> logger, Interfaces.IGameDatabaseService gameDatebaseServie, Interfaces.IUserDatabaseService userDatabaseService)
         {
             _SessionService = sessionService;
             _SessionService.AllPartnersConnected += _OnAllPartnersConnected;
 
             _Logger = logger;
             _GameDatabaseService = gameDatebaseServie;
+            _UserDatabaseService = userDatabaseService;
         }
 
         /// <summary>
@@ -142,6 +145,23 @@ namespace APIPacBomb.Controllers
             }
 
             return Ok(response);
+        }
+
+        /// <summary>
+        ///   Liefert die Spielhistorie eines Nutzers
+        /// </summary>
+        /// <param name="uid">User-Id</param>
+        /// <returns>Liste der Spielehistorie</returns>
+        [Authorize]
+        [HttpGet("GameHistory/{uid}")]
+        public IActionResult GetGameHistory(int uid)
+        {
+            if (!Classes.Util.IsAccessAllowed(uid, HttpContext, _UserDatabaseService))
+            {
+                return StatusCode(403, new Classes.Responses.StdResponse(false, "Zugriff verweigert."));
+            }
+
+            return Ok(_GameDatabaseService.GetGameHistory(uid));
         }
 
         /// <summary>

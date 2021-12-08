@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace APIPacBomb.Model
@@ -99,6 +100,33 @@ namespace APIPacBomb.Model
         public void GeneratePasswordHash()
         {
             Password = GeneratePasswordHash(Password, Secret);
+        }
+
+        /// <summary>
+        ///   Prüft, ob die E-Mail des Nutzers valide ist
+        /// </summary>
+        /// <returns>true, wenn ja, sonst false</returns>
+        public bool IsMailValid()
+        {
+            if (Email.Trim().EndsWith("."))
+            {
+                return false;
+            }
+
+            if (!Regex.IsMatch(Email, @"[A-Za-z1-9\.-_]{1,}@[A-Za-z1-9\.-_]{2,}\.[A-Za-z]{2,}"))
+            {
+                return false;
+            }
+
+            try
+            {
+                System.Net.Mail.MailAddress mail = new System.Net.Mail.MailAddress(Email);
+                return mail.Address == Email;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>

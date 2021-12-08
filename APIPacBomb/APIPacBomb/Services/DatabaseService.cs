@@ -163,6 +163,27 @@ namespace APIPacBomb.Services
         }
 
         /// <summary>
+        ///   Liefert das Result-Set als abzählbare Recordsammlung
+        /// </summary>
+        /// <param name="command">Abfrage</param>        
+        /// <returns>Result-Set</returns>
+        protected IEnumerable<IDataRecord> _ExecuteQuery(MySqlCommand command)
+        {
+            command.Connection = _GetSQLConnection();
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                _logger.LogInformation("Executed select: {0}", command.CommandText);
+
+                while (reader.Read())
+                {
+                    yield return reader;
+                }
+            }
+            
+        }
+
+        /// <summary>
         ///   Führt ein Nichtabfrage-Statement aus
         /// </summary>
         /// <param name="cmdText">Kommando</param>

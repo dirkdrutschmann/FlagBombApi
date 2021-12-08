@@ -56,5 +56,36 @@ namespace APIPacBomb.Classes
 
             return username.Value;
         }
+
+        /// <summary>
+        ///   Prüft, ob die Nutzer-Id gleich der Nutzer-Id des JWT ist
+        /// </summary>
+        /// <param name="requestedUserId">Nutzer-Id</param>
+        /// <param name="context">HTTP-Context</param>
+        /// <param name="userDatabaseService">User-Datenbankdienst</param>
+        /// <returns>true, wenn ja, sonst false</returns>
+        public static bool IsAccessAllowed(int requestedUserId, HttpContext context, Interfaces.IUserDatabaseService userDatabaseService)
+        {
+            return IsAccessAllowed(userDatabaseService.GetUser(requestedUserId), context, userDatabaseService);
+        }
+
+        /// <summary>
+        ///   Prüft, ob die Nutzer-Id gleich der Nutzer-Id des JWT ist
+        /// </summary>
+        /// <param name="requestUser">Nutzer</param>
+        /// <param name="context">HTTP-Context</param>
+        /// <param name="userDatabaseService">User-Datenbankdienst</param>
+        /// <returns>true, wenn ja, sonst false</returns>
+        public static bool IsAccessAllowed(Model.User requestUser, HttpContext context, Interfaces.IUserDatabaseService userDatabaseService)
+        {
+            Model.User LoggedOnUser = userDatabaseService.GetUser(GetUsernameFromToken(context));
+
+            if (requestUser.Id != LoggedOnUser.Id && !LoggedOnUser.IsAdmin)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

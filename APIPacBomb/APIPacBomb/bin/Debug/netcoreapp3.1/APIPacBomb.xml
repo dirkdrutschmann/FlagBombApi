@@ -164,6 +164,21 @@
               Bombenanzahl beim Start
             </summary>
         </member>
+        <member name="T:APIPacBomb.Classes.Responses.GameHistoryEntry">
+            <summary>
+              Klasse für einen Eintrag der Spielehistorie
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Responses.GameHistoryEntry.RequestedOn">
+            <summary>
+              Zeitpunkt der Anfrage
+            </summary>
+        </member>
+        <member name="P:APIPacBomb.Classes.Responses.GameHistoryEntry.Opponent">
+            <summary>
+              Gegner
+            </summary>
+        </member>
         <member name="T:APIPacBomb.Classes.Responses.StdResponse">
             <summary>
               Klasse für Standard-Antworten vom Server
@@ -236,12 +251,30 @@
             <param name="context">HTTP-Kontext</param>
             <returns>Nutzername, wenn Claim im JWT gesetzt, sonst <code>string.Empty</code></returns>
         </member>
+        <member name="M:APIPacBomb.Classes.Util.IsAccessAllowed(System.Int32,Microsoft.AspNetCore.Http.HttpContext,APIPacBomb.Interfaces.IUserDatabaseService)">
+            <summary>
+              Prüft, ob die Nutzer-Id gleich der Nutzer-Id des JWT ist
+            </summary>
+            <param name="requestedUserId">Nutzer-Id</param>
+            <param name="context">HTTP-Context</param>
+            <param name="userDatabaseService">User-Datenbankdienst</param>
+            <returns>true, wenn ja, sonst false</returns>
+        </member>
+        <member name="M:APIPacBomb.Classes.Util.IsAccessAllowed(APIPacBomb.Model.User,Microsoft.AspNetCore.Http.HttpContext,APIPacBomb.Interfaces.IUserDatabaseService)">
+            <summary>
+              Prüft, ob die Nutzer-Id gleich der Nutzer-Id des JWT ist
+            </summary>
+            <param name="requestUser">Nutzer</param>
+            <param name="context">HTTP-Context</param>
+            <param name="userDatabaseService">User-Datenbankdienst</param>
+            <returns>true, wenn ja, sonst false</returns>
+        </member>
         <member name="T:APIPacBomb.Controllers.GameController">
             <summary>
               Controller für Spielrequests
             </summary>
         </member>
-        <member name="M:APIPacBomb.Controllers.GameController.#ctor(APIPacBomb.Interfaces.ISessionService,Microsoft.Extensions.Logging.ILogger{APIPacBomb.Controllers.GameController},APIPacBomb.Interfaces.IGameDatabaseService)">
+        <member name="M:APIPacBomb.Controllers.GameController.#ctor(APIPacBomb.Interfaces.ISessionService,Microsoft.Extensions.Logging.ILogger{APIPacBomb.Controllers.GameController},APIPacBomb.Interfaces.IGameDatabaseService,APIPacBomb.Interfaces.IUserDatabaseService)">
             <summary>
               Erstellt eine Instanz der Game-Controller-Klasse
             </summary>
@@ -269,6 +302,13 @@
             </summary>
             <param name="playingPairId">Spielerpaar-Id</param>
             <returns>StdResponse</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.GameController.GetGameHistory(System.Int32)">
+            <summary>
+              Liefert die Spielhistorie eines Nutzers
+            </summary>
+            <param name="uid">User-Id</param>
+            <returns>Liste der Spielehistorie</returns>
         </member>
         <member name="M:APIPacBomb.Controllers.GameController.Get(System.String,System.Int32)">
             <summary>
@@ -424,6 +464,13 @@
             </summary>
             <param name="id">UserId</param>
             <returns>BASE64-kodiertes Bild</returns>
+        </member>
+        <member name="M:APIPacBomb.Controllers.UserController.Update(APIPacBomb.Model.User)">
+            <summary>
+              Ändert einen Nutzer
+            </summary>
+            <param name="user">Neue Nutzerinformationen</param>
+            <returns>StdResponse</returns>
         </member>
         <member name="T:APIPacBomb.Model.Map.Bomberman">
             <summary>
@@ -835,6 +882,12 @@
               Erzeugt das Passwort mit Hilfe der Rohdaten und dem zufälligen Secret
             </summary>        
         </member>
+        <member name="M:APIPacBomb.Model.User.IsMailValid">
+            <summary>
+              Prüft, ob die E-Mail des Nutzers valide ist
+            </summary>
+            <returns>true, wenn ja, sonst false</returns>
+        </member>
         <member name="M:APIPacBomb.Model.User.GeneratePasswordHash(System.String,System.String)">
             <summary>
               Erzeugt das Passwort mit Hilfe der Rohdaten und dem zufälligen Secret
@@ -918,6 +971,13 @@
             <param name="param">Abfrageparameter</param>
             <returns>Result-Set</returns>
         </member>
+        <member name="M:APIPacBomb.Services.DatabaseService._ExecuteQuery(MySql.Data.MySqlClient.MySqlCommand)">
+            <summary>
+              Liefert das Result-Set als abzählbare Recordsammlung
+            </summary>
+            <param name="command">Abfrage</param>        
+            <returns>Result-Set</returns>
+        </member>
         <member name="M:APIPacBomb.Services.DatabaseService._ExecuteNonQuery(System.String,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
             <summary>
               Führt ein Nichtabfrage-Statement aus
@@ -956,6 +1016,12 @@
               Schreibt die Datenbankeinträge für die teilgenommenen Nutzer
             </summary>
             <param name="pair">Spielpaarung</param>
+        </member>
+        <member name="M:APIPacBomb.Services.GameDatabaseService.GetGameHistory(System.Int32)">
+            <summary>
+              Liefert die Spielehistory eines Nutzers
+            </summary>
+            <param name="uid">UserId</param>
         </member>
         <member name="T:APIPacBomb.Services.SessionService">
             <summary>

@@ -232,7 +232,7 @@ namespace APIPacBomb.Controllers
         {
             Model.User requestedUser = _userDatabaseService.GetUser(id);
 
-            if (!_IsAccessAllowed(requestedUser, HttpContext))
+            if (!Classes.Util.IsAccessAllowed(requestedUser, HttpContext, _userDatabaseService))
             {
                 return NotFound();
             }            
@@ -249,12 +249,39 @@ namespace APIPacBomb.Controllers
         [HttpGet("{id}/Picture")]
         public IActionResult GetPicture(int id)
         {
-            if (!_IsAccessAllowed(id, HttpContext))
+            if (!Classes.Util.IsAccessAllowed(id, HttpContext, _userDatabaseService))
             {
                 return NotFound();
             }
 
             return Ok(_userDatabaseService.GetUserPicture(id));
+        }
+
+        /// <summary>
+        ///   Ändert einen Nutzer
+        /// </summary>
+        /// <param name="user">Neue Nutzerinformationen</param>
+        /// <returns>StdResponse</returns>
+        [Authorize]
+        [HttpPost("{id}")]
+        public IActionResult Update([FromBody]Model.User user)
+        {
+            if (!Classes.Util.IsAccessAllowed(user, HttpContext, _userDatabaseService))
+            {
+                return StatusCode(403, new Classes.Responses.StdResponse(false, "Zugriff verweigert."));
+            }
+
+            try
+            {
+                _userDatabaseService.SetUser(user);                
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Classes.Responses.StdResponse(false, ex.Message));
+            }
+            
+
+            return Ok(new Classes.Responses.StdResponse(true, "Nutzer erfolgreich aktualisiert"));
         }
 
         private IActionResult _GetPlayRequest(Model.User user, bool outgoing)
@@ -274,23 +301,5 @@ namespace APIPacBomb.Controllers
 
             return Ok(requests);
         }
-
-        private bool _IsAccessAllowed(int requestedUserId, HttpContext context)
-        {
-            return _IsAccessAllowed(_userDatabaseService.GetUser(requestedUserId), context);
-        }
-
-        private bool _IsAccessAllowed(Model.User requestUser, HttpContext context)
-        {
-            Model.User LoggedOnUser = _userDatabaseService.GetUser(Classes.Util.GetUsernameFromToken(context));
-
-            if (requestUser.Id != LoggedOnUser.Id && !LoggedOnUser.IsAdmin)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
     }
 }

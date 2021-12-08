@@ -351,6 +351,11 @@ namespace APIPacBomb.Services
         /// <returns>0-basierender Index, wenn nicht gefunden -1</returns>
         private int _GetIndexOf(Model.User user)
         {
+            if (user == null)
+            {
+                return -1;
+            }
+
             return _GetIndexOf(user.Id);
         }
 

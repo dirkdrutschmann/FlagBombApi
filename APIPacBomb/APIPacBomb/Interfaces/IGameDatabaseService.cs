@@ -10,5 +10,7 @@ namespace APIPacBomb.Interfaces
         public void WriteGame(Classes.UserPlayingPair pair);
 
         public void WriteUsers(Classes.UserPlayingPair pair);
+
+        public List<Classes.Responses.GameHistoryEntry> GetGameHistory(int uid);
     }
 }

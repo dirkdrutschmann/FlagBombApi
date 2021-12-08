@@ -7411,11 +7411,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\temp\\PacBombApi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
+      "projectUniqueName": "D:\\temp\\FlagBombApi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
       "projectName": "APIPacBomb",
-      "projectPath": "D:\\temp\\PacBombApi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
+      "projectPath": "D:\\temp\\FlagBombApi\\APIPacBomb\\APIPacBomb\\APIPacBomb.csproj",
       "packagesPath": "C:\\Users\\Manuel\\.nuget\\packages\\",
-      "outputPath": "D:\\temp\\PacBombApi\\APIPacBomb\\APIPacBomb\\obj\\",
+      "outputPath": "D:\\temp\\FlagBombApi\\APIPacBomb\\APIPacBomb\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Microsoft Visual Studio\\Shared\\NuGetPackages",

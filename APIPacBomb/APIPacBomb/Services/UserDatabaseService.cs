@@ -230,32 +230,63 @@ namespace APIPacBomb.Services
 
             if (!user.Email.Equals(compUser.Email))
             {
-                set = (!string.IsNullOrEmpty(set) ? ", " : "") + "email = @email";
+                if (!user.IsMailValid())
+                {
+                    throw new ArgumentException("E-Mailadresse ist ungültig!");
+                }
+
+                if (ExistsMail(user.Email))
+                {
+                    throw new ArgumentException("E-Mailadresse bereits vorhanden!");
+                }
+
+                set += (!string.IsNullOrEmpty(set) ? ", " : "") + "email = @email";
                 paras.Add(new KeyValuePair<string, string>("@email", user.Email));
             }
 
             if (!user.Prename.Equals(compUser.Prename))
             {
-                set = (!string.IsNullOrEmpty(set) ? ", " : "") + "prename = @prename";
+                set += (!string.IsNullOrEmpty(set) ? ", " : "") + "prename = @prename";
                 paras.Add(new KeyValuePair<string, string>("@prename", user.Prename));
             }
 
             if (!user.Lastname.Equals(compUser.Lastname))
             {
-                set = (!string.IsNullOrEmpty(set) ? ", " : "") + "lastname = @lastname";
+                set += (!string.IsNullOrEmpty(set) ? ", " : "") + "lastname = @lastname";
                 paras.Add(new KeyValuePair<string, string>("@lastname", user.Lastname));
+            }
+
+            if (!string.IsNullOrEmpty(user.Password))
+            {
+                user.Secret = Guid.NewGuid().ToString();
+                user.GeneratePasswordHash();
+
+                set += (!string.IsNullOrEmpty(set) ? ", " : "") + "password = @password, secret = @secret";
+                paras.Add(new KeyValuePair<string, string>("@password", user.Password));
+                paras.Add(new KeyValuePair<string, string>("@secret", user.Secret));
             }
 
             if (!user.LastLogon.Equals(compUser.LastLogon))
             {
-                set = (!string.IsNullOrEmpty(set) ? ", " : "") + "last_logon = @last_logon";
+                set += (!string.IsNullOrEmpty(set) ? ", " : "") + "last_logon = @last_logon";
                 paras.Add(new KeyValuePair<string, string>("@last_logon", user.LastLogon.ToString("yyyy-MM-dd HH:mm:ss")));
             }
 
             if (!string.IsNullOrEmpty(set))
             {
                 _ExecuteNonQuery(string.Format(cmd, set), paras);
-            }            
+            }   
+            
+            // Bild übergeben
+            if (!string.IsNullOrEmpty(user.UserImageBase64))
+            {
+                compUser.UserImageBase64 = GetUserPicture(user.Id);
+
+                if (!user.UserImageBase64.Equals(compUser.UserImageBase64))
+                {
+                    SetUserPricture(user.Id, user.UserImageBase64);
+                }
+            }
         }
 
         /// <summary>
