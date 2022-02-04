@@ -136,16 +136,20 @@ namespace APIPacBomb.Services
         public List<Classes.Responses.GameHistoryEntry> GetGameHistory(int uid)
         {
             string cmdText = "select g.requested_on, " +
-                             "       group_concat(u.username separator ', ') as opponent " +
-                             "from   `pb_games`   g, " +
-                             "       `pb_players` p, " +
-                             "       `pb_users`   u " +
-                             "where  g.pair_id = p.pair_id " +
-                             "and    p.uid = u.id " +
+                             "       group_concat(u.username separator ', ') as opponent  " +
+                             "from   `pb_games`   g,  " +
+                             "       `pb_players` p,  " +
+                             "       `pb_players` p2, " +
+                             "       `pb_users`   u  " +
+                             "where  g.pair_id = p.pair_id  " +
+                             "and    g.pair_id = p2.pair_id " +
+                             "and    p.uid = u.id  " +
                              "and    p.uid != @uid " +
-                             "group  by g.pair_id " +
-                             "order  by 1 desc " +
+                             "and    p2.uid = @uid " +
+                             "group  by g.pair_id  " +
+                             "order  by 1 desc  " +
                              "limit  10 ";
+
             MySqlCommand command = new MySqlCommand(cmdText);
             command.Parameters.AddWithValue("@uid", uid);
 
